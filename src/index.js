@@ -1,5 +1,5 @@
 const INDENT = '\n     '
-
+let silent = false
 
 /**
  * Prints stylized type names for values (or arrays of values) passed.
@@ -31,7 +31,7 @@ function msg(required, passed) {
     if (i < required.length - 1) message += ', '
   }
   message += '\n  PASSED:     '
-  if (!passed.length) message += ' void '
+  if (!passed.length) message += 'void'
   for (let i = 0; i < passed.length; i++) {
     message += printType(passed[i])
     if (i < passed.length - 1) message += ', '
@@ -63,4 +63,11 @@ function TYPEOF() {
   }
 }
 
-module.exports = passed => TYPEOF.bind(passed)
+function API(passed){
+  if (silent) return (function () {})
+  return (TYPEOF.bind(passed))
+}
+
+API.silence = function () {silent = true}
+
+module.exports = API
