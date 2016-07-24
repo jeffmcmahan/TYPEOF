@@ -1,0 +1,19 @@
+{
+  "name": "typeof",
+  "version": "0.0.1",
+  "description": "Static types plain javascript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffmcmahan/TYPEOF.git"
+  },
+  "author": "Jeff McMahan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffmcmahan/TYPEOF/issues"
+  },
+  "homepage": "https://github.com/jeffmcmahan/TYPEOF#readme"
+}
