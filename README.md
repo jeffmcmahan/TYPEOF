@@ -19,7 +19,7 @@ lastVisited('Texas', 'long ago') // throws
 //   PASSED:    String, String
 //
 //     at Object.TYPEOF (/Users/.../TYPEOF/src/index.js:62:52)
-//     at testE (/Users/.../TYPEOF/tests/index.js:124:5)
+//     at lastVisited (/Users/.../TYPEOF/tests/index.js:124:5)
 //     at Object.<anonymous> (/Users/.../TYPEOF/tests/index.js:136:1)
 //     at Module._compile (module.js:541:32)
 //     at Object.Module._extensions..js (module.js:550:10)
