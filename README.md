@@ -2,6 +2,8 @@
 Enforce argument types in any function or method by adding pretty declarations to the body:
 
 ```js
+const TYPEOF = require('typeof')
+
 function lastVisited(place, year) {
 
   TYPEOF
