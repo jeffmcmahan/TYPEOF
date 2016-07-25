@@ -124,21 +124,71 @@ assert.throws(
 
 class NewClass {}
 
-function testE() {
+function testE1() {
   TYPEOF
     (arguments)
     (NewClass)
   return true
 }
 
-assert(testE(new NewClass()))
+assert(testE1(new NewClass()))
 
 assert.throws(
-  testE.bind(null, new Object()),
+  testE1.bind(null, new Object()),
   /NewClass/,
   'Incorrect class'
 )
 
+function OtherClass() {}
+
+function testE2() {
+  TYPEOF
+    (arguments)
+    (OtherClass)
+  return true
+}
+
+assert(testE2(new OtherClass()))
+
+assert.throws(
+  testE2.bind(null, new Object()),
+  /OtherClass/,
+  'Incorrect class'
+)
+
+function testE3() {
+  TYPEOF
+    (arguments)
+    ('OtherClass')
+  return true
+}
+
+assert(testE3(new OtherClass()))
+
+assert.throws(
+  testE2.bind(null, new Object()),
+  /OtherClass/,
+  'Incorrect class'
+)
+
 //==============================================================================
+// Silence
+
+function testF() {
+  TYPEOF
+    (arguments)
+    (Number)
+  return true
+}
+
+assert.throws(
+  testF,
+  /void/,
+  'Non-silent.'
+)
+
+TYPEOF.silence()
+
+assert(testF())
 
 process.stdout.write('  ✔ All unit tests passed.\n\n')
