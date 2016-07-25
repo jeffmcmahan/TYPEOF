@@ -4,7 +4,7 @@
   "description": "Static types plain javascript.",
   "main": "dist/tyepof.js",
   "scripts": {
-    "build": "buble src/index.js >> dist/tyepof.js",
+    "build": "buble src/index.js > dist/tyepof.js",
     "test": "node tests/index.js"
   },
   "repository": {
