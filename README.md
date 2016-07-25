@@ -40,8 +40,11 @@ This would-be declaration is a higher-order function invocation which itself enf
 * Disjunctions expressed as flat arrays, which can include `null`.
 
 ## Silence it in production.
-It's handy to have fussy type warnings when you're working the code, but you can disable it by checking some condition in your code:
+It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by checking some condition in your code and calling `.silence()`:
+
 ```js
 // For example, if using in the browser:
 if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
 ```
+
+This prevents the type checking logic from running, to the performance hit of having the declarations in the code is &approx;zero when silenced.
