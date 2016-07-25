@@ -2,11 +2,11 @@
 Enforce argument types in any function or method by adding pretty declarations to the body:
 
 ```js
-const TYPEOF = require('typeof')
+const INTERFACE = require('interface')
 
 function lastVisited(place, year) {
 
-  TYPEOF
+  INTERFACE
     (arguments)
     (String, Number)
 
@@ -20,9 +20,9 @@ lastVisited('Texas', 'long ago') // throws
 //   REQUIRED:  String, Number
 //   PASSED:    String, String
 //
-//     at Object.TYPEOF (/Users/.../TYPEOF/src/index.js:62:52)
-//     at lastVisited (/Users/.../TYPEOF/tests/index.js:124:5)
-//     at Object.<anonymous> (/Users/.../TYPEOF/tests/index.js:136:1)
+//     at Object.INTERFACE (/Users/.../INTERFACE/src/index.js:62:52)
+//     at lastVisited (/Users/.../INTERFACE/tests/index.js:124:5)
+//     at Object.<anonymous> (/Users/.../INTERFACE/tests/index.js:136:1)
 //     at Module._compile (module.js:541:32)
 //     at Object.Module._extensions..js (module.js:550:10)
 //     at Module.load (module.js:458:32)
@@ -37,6 +37,7 @@ This would-be declaration is a higher-order function invocation which itself enf
 ## Permitted type declarations:
 * `String, Number, Array, Boolean, Function, Object`
 * Any class/constructor
+* The name of any constructor (passed as a string)
 * Disjunctions expressed as flat arrays, which can include `null`.
 * `void` is expressed by passing nothing `()`.
 
@@ -45,7 +46,7 @@ It's handy to have fussy type warnings when you're working on the code, but you 
 
 ```js
 // For example, if using in the browser:
-if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
+if (location.href.indexOf('localhost') === -1) INTERFACE.silence()
 ```
 
 This prevents the type checking logic from running, so the performance hit of having the declarations in the code is &approx;zero when silenced.
