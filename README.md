@@ -47,4 +47,4 @@ It's handy to have fussy type warnings when you're working on the code, but you 
 if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
 ```
 
-This prevents the type checking logic from running, to the performance hit of having the declarations in the code is &approx;zero when silenced.
+This prevents the type checking logic from running, so the performance hit of having the declarations in the code is &approx;zero when silenced.
