@@ -38,6 +38,7 @@ This would-be declaration is a higher-order function invocation which itself enf
 * `String, Number, Array, Boolean, Function, Object`
 * Any class/constructor
 * Disjunctions expressed as flat arrays, which can include `null`.
+* `void` is expressed by passing nothing `()`.
 
 ## Silence it in production.
 It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by checking some condition in your code and calling `.silence()`:
