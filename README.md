@@ -32,9 +32,16 @@ lastVisited('Texas', 'long ago') // throws
 //     at run (bootstrap_node.js:352:7)
 ```
 
-This would-be declaration is a higher-order function invocation which itself enforces the desired type and arity requirements. That means we don't need to transpile the code. It runs as is.
+This would-be declaration is a higher-order function invocation which itself enforces the desired type and arity requirements. Obviously that means there is no build step.
 
 ## Permitted type declarations:
 * `String, Number, Array, Boolean, Function, Object`
 * Any class/constructor
 * Disjunctions expressed as flat arrays, which can include `null`.
+
+## Silence it in production.
+It's handy to have fussy type warnings when you're working the code, but you can disable it by checking some condition in your code:
+```js
+// For example, if using in the browser:
+if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
+```
