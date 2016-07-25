@@ -91,8 +91,10 @@ function TYPEOF() {
   }
 }
 
+function silence(){}
+
 function API(passed){
-  if (silent) return (function () {})
+  if (silent) return (silence)
   return (TYPEOF.bind(passed))
 }
 
