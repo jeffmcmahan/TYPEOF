@@ -1,9 +1,10 @@
 {
-  "name": "typeof",
+  "name": "typeof-arg",
   "version": "0.0.1",
   "description": "Static types plain javascript.",
-  "main": "index.js",
+  "main": "dist/tyepof.js",
   "scripts": {
+    "build": "buble src/index.js >> dist/tyepof.js",
     "test": "node tests/index.js"
   },
   "repository": {
