@@ -2,11 +2,11 @@
 Enforce argument types in any function or method by adding pretty declarations to the body:
 
 ```js
-const INTERFACE = require('interface')
+const TYPEOF = require('typeof-arg')
 
 function lastVisited(place, year) {
 
-  INTERFACE
+  TYPEOF
     (arguments)
     (String, Number)
 
@@ -20,9 +20,9 @@ lastVisited('Texas', 'long ago') // throws
 //   REQUIRED:  String, Number
 //   PASSED:    String, String
 //
-//     at Object.INTERFACE (/Users/.../INTERFACE/src/index.js:62:52)
-//     at lastVisited (/Users/.../INTERFACE/tests/index.js:124:5)
-//     at Object.<anonymous> (/Users/.../INTERFACE/tests/index.js:136:1)
+//     at Object.TYPEOF (/Users/.../TYPEOF/src/index.js:62:52)
+//     at lastVisited (/Users/.../TYPEOF/tests/index.js:124:5)
+//     at Object.<anonymous> (/Users/.../TYPEOF/tests/index.js:136:1)
 //     at Module._compile (module.js:541:32)
 //     at Object.Module._extensions..js (module.js:550:10)
 //     at Module.load (module.js:458:32)
@@ -46,7 +46,7 @@ It's handy to have fussy type warnings when you're working on the code, but you 
 
 ```js
 // For example, if using in the browser:
-if (location.href.indexOf('localhost') === -1) INTERFACE.silence()
+if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
 ```
 
 This prevents the type checking logic from running, so the performance hit of having the declarations in the code is &approx;zero when silenced.
