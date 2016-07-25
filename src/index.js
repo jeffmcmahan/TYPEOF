@@ -1,4 +1,5 @@
-const INDENT = '\n     '
+'use strict'
+
 let silent = false
 
 /**
@@ -7,8 +8,8 @@ let silent = false
  * @param {*} val
  * @return {String}
  */
-function printType(val, isRequirement) {
-  if (isRequirement && Array.isArray(val)) {
+function printType(val, allowArray) {
+  if (allowArray && Array.isArray(val)) {
     return val.map(inVal => printType(inVal, true)).join('|')
   }
   if (val === null) return 'null'
@@ -51,15 +52,40 @@ function TYPEOF() {
   if (passed.length < required.length) throw new TypeError(msg(required, passed))
   if (passed.length > required.length) throw new TypeError(msg(required, passed))
   for (let i = 0; i < passed.length; i++) {
-    if (!Array.isArray(required[i]) && passed[i] === required[i] === null) return
-    if (!Array.isArray(required[i]) && passed[i] === null) throw new TypeError(msg(required, passed))
-    if (required[i] === null) throw new TypeError(msg(required, passed))
+
+    // Null reqired, null passed.
+    if (!Array.isArray(required[i]) && passed[i] === required[i] === null) {
+      return
+    }
+
+    // Null passed but not required.
+    if (!Array.isArray(required[i]) && passed[i] === null) {
+      throw new TypeError(msg(required, passed))
+    }
+
+    // Null required but not passed.
+    if (required[i] === null) {
+      throw new TypeError(msg(required, passed))
+    }
+
+    // Disjunctive requirement
     if (Array.isArray(required[i])) {
       if (passed[i] === null && required[i].indexOf(null) !== -1) return
       if (required[i].indexOf(passed[i].constructor) !== -1) return
+      if (required[i].indexOf(passed[i].constructor.name) !== -1) return
       throw new TypeError(msg(required, passed))
     }
-    if (this[i].constructor !== required[i]) throw new TypeError(msg(required, passed))
+
+    // Constructor Name (as string)
+    if (typeof required[i] === 'string') {
+      required[i] = {name: required[i]}
+      if (passed[i].constructor.name === required[i].name) return
+    }
+
+    // Mismatched constructors
+    if (this[i].constructor !== required[i]) {
+      throw new TypeError(msg(required, passed))
+    }
   }
 }
 
