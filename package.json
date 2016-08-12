@@ -4,7 +4,7 @@
   "description": "Static types plain javascript.",
   "main": "dist/tyepof.js",
   "scripts": {
-    "build": "sh build.sh",
+    "build": "npm run test && sh build.sh",
     "test": "node tests/index.js"
   },
   "repository": {
