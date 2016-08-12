@@ -39,7 +39,7 @@ This would-be declaration is a higher-order function invocation which itself enf
 * Any class/constructor
 * The name of any constructor (passed as a string)
 * Disjunctions expressed as flat arrays, which can include `null`.
-* `void` is expressed by passing nothing `()`.
+* `void` is expressed by passing nothing `"void"` (as a string).
 
 ## Silence it in production.
 It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by calling `TYPEOF.silence()` or by passing a condition to `TYPEOF.silenceIf`, like this:
