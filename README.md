@@ -21,8 +21,8 @@ lastVisited('Texas', 'long ago') // throws
 //   PASSED:    String, String
 //
 //     at Object.TYPEOF (/Users/.../TYPEOF/src/index.js:62:52)
-//     at lastVisited (/Users/.../TYPEOF/tests/index.js:124:5)
-//     at Object.<anonymous> (/Users/.../TYPEOF/tests/index.js:136:1)
+//     at lastVisited (/Users/.../index.js:124:5)
+//     at Object.<anonymous> (/Users/.../index.js:136:1)
 //     at Module._compile (module.js:541:32)
 //     at Object.Module._extensions..js (module.js:550:10)
 //     at Module.load (module.js:458:32)
@@ -42,11 +42,10 @@ This would-be declaration is a higher-order function invocation which itself enf
 * `void` is expressed by passing nothing `()`.
 
 ## Silence it in production.
-It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by checking some condition in your code and calling `.silence()`:
+It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by calling `TYPEOF.silence()` or by passing a condition to `TYPEOF.silenceIf`, like this:
 
 ```js
-// For example, if using in the browser:
-if (location.href.indexOf('localhost') === -1) TYPEOF.silence()
+TYPEOF.silenceIf(location.href.indexOf('localhost') === -1)
 ```
 
 This prevents the type checking logic from running, so the performance hit of having the declarations in the code is &approx;zero when silenced.
