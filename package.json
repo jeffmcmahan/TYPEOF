@@ -1,6 +1,6 @@
 {
   "name": "typeof-arg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Static types plain javascript.",
   "main": "dist/tyepof.js",
   "scripts": {
