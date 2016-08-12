@@ -2,9 +2,9 @@
   "name": "typeof-arg",
   "version": "0.0.3",
   "description": "Static types plain javascript.",
-  "main": "dist/tyepof.js",
+  "main": "build/index.js",
   "scripts": {
-    "build": "npm run test && sh build.sh",
+    "build": "buble -i src -o build && npm run test",
     "test": "node tests/index.js"
   },
   "repository": {
