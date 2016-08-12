@@ -38,4 +38,22 @@ void function () {
 
 }()
 
+//==============================================================================
+
+void function () {
+
+  function test() {
+    TYPEOF
+      (arguments)
+      ('void')
+  }
+
+  assert.throws(
+    test.bind(null, 'ILLICIT PARAMETER'),
+    /String/,
+    'Should throw if "void" is required and an argument is passed.'
+  )
+
+}()
+
 process.stdout.write('  ✔ Tests for behavior of "void" passed.\n')
