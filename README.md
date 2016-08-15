@@ -144,6 +144,4 @@ But you are still permitted to do weird things if you choose:
 TYPEOF
   (arguments)
   (undefined, NaN, null)
-
-// -> Passing undefined triggers a TypeError
 ```
