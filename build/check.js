@@ -2,8 +2,18 @@
 
 var getSpecificType = require('./getSpecificType')
 var msg = require('./message')
-var MUST_REQUIRE_SOMETHING = ("\n\n  TYPEOF requires explicit type declarations.\n\n  - Hint: Use \"void\" (as a string) to indicate that no arguments may be passed.\n")
+var MUST_REQUIRE_SOMETHING = (
+  'TYPEOF requires explicit type declarations. Use "void" to indicate '+
+  'that no arguments may be passed.'
+)
 
+/**
+ * Checks a passed value against required type match.
+ * @function
+ * @param {*} required - native JS arguments object
+ * @param {*} passed - native JS arguments object
+ * @return {Boolean}
+ */
 function checkNonDisjoint(required, passed) {
   if (required === '*') return true
   var reqType = getSpecificType(required, true)
@@ -11,6 +21,13 @@ function checkNonDisjoint(required, passed) {
   return reqType === valType
 }
 
+/**
+ * Checks a shallow array for disjunctive type match with passed value.
+ * @function
+ * @param {*} required - native JS arguments object
+ * @param {*} passed - native JS arguments object
+ * @return {Boolean}
+ */
 function checkDisjoint(required, passed) {
   var reqTypes = required.map(getSpecificType, true)
   var valType = getSpecificType(passed)
@@ -24,7 +41,6 @@ function checkDisjoint(required, passed) {
  * @function
  * @this native JS arguments object
  * @return {undefined}
- * @note Undefined is not allowed under any circumstances.
  */
 function check() {
   var passed = this

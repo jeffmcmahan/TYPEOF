@@ -1,8 +1,8 @@
-/**
- * The aim here is to provide type checks which do _not_ depend on checking,
- * e.g., for Array before Object, to get the right value. This is less \
- * performant, but it gives correct results.
- */
+/*
+The aim is to provide type checks which do _not_ depend on ordered
+fall-through to get the type. This is less performant, but gives correct
+results.
+*/
 
 exports.null = function (val) {
   return val === null
@@ -61,15 +61,22 @@ exports.function = function (val) {
 
 exports.nativeConstructor = function (val) {
   return (
-    val === Function ||
-    val === Object ||
-    val === String ||
-    val === Boolean ||
-    val === Array ||
+    val === Function  ||
+    val === Object    ||
+    val === String    ||
+    val === Boolean   ||
+    val === Array     ||
     val === Number
   )
 }
 
+/**
+ * True if the value is not a primitive or native type.
+ * @function
+ * @param {*} val
+ * @return {Boolean}
+ * @note Must use capitalized constructors for correct results.
+ */
 exports.other = function (val) {
   if (!val) return false
   if (exports.nativeConstructor(val)) return false

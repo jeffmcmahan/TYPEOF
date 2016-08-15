@@ -2,11 +2,16 @@
 
 var is = require('./is')
 
+/**
+ * Finds the most specific type name applicable for a given value.
+ * @function
+ * @param {*} val
+ * @param {Boolean} isReq - optional
+ * @return {String}
+ */
 function getSpecificType(val, isReq) {
-
   if (isReq && typeof val === 'string') return val
   if (isReq && Array.isArray(val)) return val.map(getSpecificType).join('|')
-
   if (is.other(val))       return val.name || val.constructor.name
   if (is.undefined(val))   return 'undefined'
   if (is.null(val))        return 'null'
