@@ -8,27 +8,27 @@ const TYPEOF = require('../src')
 function test(amount) {
   TYPEOF
     (arguments)
-    ([Number,String,null])
+    ([Number, String, null])
 }
 
 assert.doesNotThrow(
   test.bind(null, 1),
-  'Should not throw is passed type is within an array.'
+  'Should not throw when passed type is within the array.'
 )
 
 assert.doesNotThrow(
   test.bind(null, '1'),
-  'Should not throw is passed type is within an array.'
+  'Should not throw when passed type is within the array.'
 )
 
 assert.doesNotThrow(
   test.bind(null, null),
-  'Should not throw is passed type is within an array.'
+  'Should not throw when passed type is within the array.'
 )
 
 assert.throws(
   test.bind(null, {}),
-  /Object/,
+  /Number\|String\|null/,
   'Should throw when the param type is not in the array.'
 )
 

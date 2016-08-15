@@ -16,7 +16,7 @@ void function () {
   assert.throws(
     test.bind(null, undefined),
     /String/,
-    'Should throw when undefined is passed.'
+    'Should throw when string is required and undefined is passed.'
   )
 
 }()
@@ -32,9 +32,14 @@ void function () {
   }
 
   assert.throws(
+    test.bind(null, 'string'),
+    /String/,
+    'Should throw when undefined is required and string is passed.'
+  )
+
+  assert.doesNotThrow(
     test.bind(null, undefined),
-    /TYPEOF doesn't allow/,
-    'Should throw when undefined is required.'
+    'Should not throw when undefined is required and passed.'
   )
 
 }()
