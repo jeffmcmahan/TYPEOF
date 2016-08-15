@@ -12,7 +12,10 @@ const is = require('./is')
 function getSpecificType(val, isReq) {
   if (isReq && typeof val === 'string') return val
   if (isReq && Array.isArray(val)) return val.map(getSpecificType).join('|')
-  if (is.other(val))       return val.name || val.constructor.name
+  if (is.other(val)) {
+    if (typeof val === 'function') return val.name
+    if (typeof val === 'object') return val.constructor.name
+  }
   if (is.undefined(val))   return 'undefined'
   if (is.null(val))        return 'null'
   if (is.boolean(val))     return 'Boolean'
