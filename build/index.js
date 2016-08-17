@@ -12,7 +12,7 @@ var silent = false
  * @return {Function}
  */
 function API(passed) {
-  return (silent ? doNothing : check.bind(passed))
+  return (silent ? doNothing : check(passed))
 }
 
 /**

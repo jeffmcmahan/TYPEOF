@@ -8,6 +8,23 @@ var MUST_REQUIRE_SOMETHING = (
 )
 
 /**
+ * Produces a cleaner stack (to avoid referencing TYPEOF's own functions).
+ * @function
+ * @param {String} msg
+ * @return {undefined}
+ */
+function throwErr(msg) {
+  var err = new TypeError(msg)
+  err.stack = (
+    err.stack
+      .split('\n')
+      .filter(function (line) { return line.indexOf('check.js') === -1; })
+      .join('\n')
+  )
+  throw err
+}
+
+/**
  * Checks a passed value against required type match.
  * @function
  * @param {*} required - native JS arguments object
@@ -35,6 +52,18 @@ function checkDisjoint(required, passed) {
   return false
 }
 
+function duckType(required, passed, argNum) {
+  var props = Object.keys(required)
+  var reqArr = props.map(function (key) { return required[key]; })
+  var argArr = props.map(function (key) { return passed[key]; })
+  var context = {
+    required: required,
+    passed: passed,
+    argNum: argNum
+  }
+  check(argArr).apply(context, reqArr)
+}
+
 /**
  * Ensures that the passed arguments match the requirements in arity,
  * type, and order.
@@ -42,28 +71,33 @@ function checkDisjoint(required, passed) {
  * @this native JS arguments object
  * @return {undefined}
  */
-function check() {
-  var passed = this
-  if (!arguments.length) throw new Error(MUST_REQUIRE_SOMETHING)
-  var required = (arguments[0] === 'void') ? [] : arguments
+function check(passed) {
+  function checker() {
+    var this$1 = this;
 
-  // Check arity
-  if (passed.length !== required.length) {
-    throw new TypeError(msg(required, passed))
-  }
+    if (!arguments.length) throw new Error(MUST_REQUIRE_SOMETHING)
+    var required = (arguments[0] === 'void') ? [] : arguments
 
-  // Check types
-  for (var i = 0; i < passed.length; i++) {
-    if (Array.isArray(required[i])) {
-      if (!checkDisjoint(required[i], passed[i])) {
-        throw new TypeError(msg(required, passed))
+    // Check arity
+    if (passed.length !== required.length) throwErr(msg(required, passed))
+
+    // Check types
+    for (var i = 0; i < passed.length; i++) {
+      if (typeof required[i] === 'object' && required[i].constructor === Object) {
+        duckType(required[i], passed[i], i)
       }
-    } else {
-      if (!checkNonDisjoint(required[i], passed[i])) {
-        throw new TypeError(msg(required, passed))
+      if (Array.isArray(required[i])) {
+        if (!checkDisjoint(required[i], passed[i])) {
+          throwErr(msg(required, passed, this$1))
+        }
+      } else {
+        if (!checkNonDisjoint(required[i], passed[i])) {
+          throwErr(msg(required, passed, this$1))
+        }
       }
     }
   }
+  return checker
 }
 
 module.exports = check
