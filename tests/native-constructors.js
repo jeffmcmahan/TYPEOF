@@ -30,7 +30,7 @@ assert.throws(
 
 assert.throws(
   test.bind(null, 'name', 10, null, [], {}),
-  /String, Number, null, Array, Object/,
+  /String, Number, null,    Array, Object/,
   'Should throw when the third param is the wrong type.'
 )
 
