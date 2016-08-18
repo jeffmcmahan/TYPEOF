@@ -1,156 +1,100 @@
 # Effective type checking in plain javascript.
-Enforce argument types in any function or method by adding pretty declarations to the body:
+
+Javascript is hostile to effective type checking. Exhibit A:
+
+* `'s' instanceof String // false`
+* `typeof [1, 2] // object`
+* `typeof null // object`
+* `typeof NaN // number`
+
+Manual type checks are categorically unmaintainable for codebases containing more than a dozen type-fussy functions. TYPEOF reduces type checking to rote declaration:
 
 ```js
-function lastVisited(place, year) {
+function (name, weight, children) {
 
   TYPEOF
     (arguments)
-    (String, Number)
+    (String, Number, Array)
 
-  return `I visited ${place} ${new Date().getFullYear() - year} years ago.`
+  // ...
 }
-
-lastVisited('Texas', 'long ago') // Throws TyepError.
 ```
 
-And here's what the error message will look like, when the wrong type is passed:
+While it's not actually declarative, it feels that way. By the act of stating the types, they are checked. And when an illicit argument is passed, you will see something like this above your stack trace:
 
-```
+```sh
 TypeError:
 
-  Required:  String, Number
-  Provided:  String, String
+  Required:  String, Number, Array
+  Provided:  String, String, Array
                      ^^^^^^
-
-    at lastVisited (/Users/.../index.js:124:5)
-    at Object.<anonymous> (/Users/.../index.js:136:1)
-    at Module._compile (module.js:541:32)
-    at Object.Module._extensions..js (module.js:550:10)
-    at Module.load (module.js:458:32)
-    at tryModuleLoad (module.js:417:12)
-    at Function.Module._load (module.js:409:3)
-    at Module.runMain (module.js:575:10)
-    at run (bootstrap_node.js:352:7)
 ```
 
-## Easily silence it in production.
-It's handy to have fussy type warnings when you're working on the code, but you can have it disabled when your code is running live by calling `TYPEOF.silence()` or by passing a condition to `TYPEOF.silenceIf`, like this:
-
-```js
-TYPEOF.silenceIf(location.hostname !== 'localhost')
+## Install
+Install from npm and start adding declarations to your functions.
+```sh
+npm install typeof-arg
 ```
 
-This prevents the type checking logic from running. The performance hit of having the declarations in the code is virtually zero when silenced.
-
-## Type Requirements
-### Void
-`void` is expressed as a string: `"void"`. No arguments are permitted, including `undefined`.
-
+## Examples
+### Native Constructors
 ```js
 TYPEOF
   (arguments)
-  ('void')
+  (Boolean, String, Number, Array, Object, Function)
 ```
 
-### Kleene star
-You can permit an argument of any type using the `*` wild card. Notice that the function's arity is still checked, so if *no* argument is passed, the check will fail. This very useful in cases where you don't need to type check a parameter, but do need to type check others:
-
-```js
-function logItem(id, item) {
-
-  TYPEOF
-    (arguments)
-    (Number, '*')
-
-  //...
-}
-```
-
-### Constructors
-Native types are handled as you would expect: `Boolean, String, Number, Array, Object, Function`, as are custom constructors (e.g., `MyFancyClass`). However, sometimes including a constructor definition will result circular references among files. For that situation, you can also pass the name of any constructor that begins with capital letter (e.g., `"MyFancyClass"`).
-
-### Union/Disjoint Requirements
-Use shallow arrays of type requirements to express that any of the given types is permitted.
-
-```js
-TYPEOF
-  (arguments)
-  ([Object, null])
-```
-
-### Duck-Type Requirements
-Use object literals to declare required object property types:
-
+### Duck-Typing
 ```js
 TYPEOF
   (arguments)
   ({ id:String, cost:Number })
 ```
 
-### Evil values: `NaN`, `null`, `undefined`
-One of the major failings of javascript is the fact that you cannot use common sense to manually type check function parameters. For example, this is quite regrettable:
-
-```js
-function sum(arg1, arg2) {
-  if (typeof arg1 !== 'number') return 0
-  if (typeof arg2 !== 'number') return 0
-  return arg1 + arg2
-}
-
-sum(NaN, 1) // -> returns NaN because typeof NaN === 'number'
-```
-
-Not-A-Number is a number. But `NaN instanceof Number` is `false`. You cannot reason about `NaN`. Did you know that `NaN !== NaN`? Yep. `NaN` is the product of arbitrary stipulation - you must simply beware of it.
-
-Or an old classic:
-```js
-function printName(person) {
-  if (typeof person === 'object' && !Array.isArray(person)) {
-    return person.name
-  }
-}
-
-printName(null) // -> TypeError, since typeof null is 'object'
-```
-
-There's lots more where that came from, and that sucks, so TYPEOF makes type declarations align with common sense:
-
+### Union/Disjoint Types
 ```js
 TYPEOF
   (arguments)
-  (Number)
-
-// -> Passing NaN triggers a TypeError
+  ([String, Number])
 ```
 
+### Custom Constructors
 ```js
 TYPEOF
   (arguments)
-  ([NaN, Decimal])
+  (MyClass)
 
-// -> Passing a Number triggers a TypeError
+// OR
+TYPEOF
+  (arguments)
+  ('MyClass')
 ```
 
+### Void
 ```js
 TYPEOF
   (arguments)
-  (null)
-
-// -> Passing an Object triggers a TypeError
+  ('void')
 ```
 
+### Wild Card
 ```js
 TYPEOF
   (arguments)
-  (Object)
-
-// -> Passing null triggers a TypeError
+  ('*')
 ```
 
-But you are still permitted to do weird things if you choose:
+### Use in Production Code
+Avoid throwing errors in production using `TYPEOF.silence()` or `TYPEOF.silenceIf(someCondition)`.
+
+### Check anything anywhere.
+TYPEOF takes any array-like argument and returns a function which accepts a list of types. That means TYPEOF will dutifully check the type of any set of values, in any context:
+
 ```js
+const person = {name: 'Jeff', age: 29}
+const toupee = {color: 'black'}
+
 TYPEOF
-  (arguments)
-  (undefined, NaN, null)
+  ([person, toupee])
+  ({ name:String, age:Number }, Object)
 ```
