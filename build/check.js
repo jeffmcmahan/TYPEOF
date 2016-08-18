@@ -1,6 +1,6 @@
 'use strict'
 
-var printSpecificType = require('./getSpecificType')
+var printSpecificType = require('./print-specific-type')
 var is = require('./is')
 var errMsg = require('./error-message')
 var MUST_REQUIRE_SOMETHING = (

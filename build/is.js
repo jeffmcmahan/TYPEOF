@@ -1,3 +1,5 @@
+'use strict'
+
 /*
 The aim is to provide type checks which do _not_ depend on ordered
 fall-through to get the type. This is less performant, but gives correct
