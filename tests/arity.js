@@ -20,7 +20,7 @@ void function () {
 
   assert.throws(
     test.bind(null, 1, 2),
-    /Number, Number/,
+    /Number/,
     'Too many arguments.'
   )
 
