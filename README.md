@@ -16,7 +16,7 @@ lastVisited('Texas', 'long ago') // Throws TyepError.
 
 And here's what the error message will look like, when the wrong type is passed:
 
-```sh
+```
 TypeError:
 
   Required:  String, Number
@@ -77,6 +77,15 @@ Use shallow arrays of type requirements to express that any of the given types i
 TYPEOF
   (arguments)
   ([Object, null])
+```
+
+### Duck-Type Requirements
+Use object literals to declare required object property types:
+
+```js
+TYPEOF
+  (arguments)
+  ({ id:String, cost:Number })
 ```
 
 ### Evil values: `NaN`, `null`, `undefined`
