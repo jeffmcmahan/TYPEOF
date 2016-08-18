@@ -1,6 +1,5 @@
 'use strict'
 
-const TYPEOF = require('../src')
 require('./undefined')
 require('./void')
 require('./arity')
