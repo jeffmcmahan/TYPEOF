@@ -19,10 +19,10 @@ And here's what the error message will look like, when the wrong type is passed:
 ```sh
 TypeError:
 
-  REQUIRED:  String, Number
-  PASSED:    String, String
+  Required:  String, Number
+  Provided:  String, String
+                     ^^^^^^
 
-    at Object.TYPEOF (/Users/.../TYPEOF/src/index.js:62:52)
     at lastVisited (/Users/.../index.js:124:5)
     at Object.<anonymous> (/Users/.../index.js:136:1)
     at Module._compile (module.js:541:32)
