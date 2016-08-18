@@ -9,9 +9,7 @@ var is = require('./is')
  * @param {Boolean} isReq - optional
  * @return {String}
  */
-function getSpecificType(val, isReq) {
-  if (isReq && typeof val === 'string') return val
-  if (isReq && Array.isArray(val)) return val.map(getSpecificType).join('|')
+function printSpecificType(val) {
   if (is.other(val)) {
     if (typeof val === 'function') return val.name
     if (typeof val === 'object') return val.constructor.name
@@ -28,4 +26,4 @@ function getSpecificType(val, isReq) {
   throw new Error('Type of '+ val +' not identified')
 }
 
-module.exports = getSpecificType
+module.exports = printSpecificType

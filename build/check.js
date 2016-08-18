@@ -1,103 +1,70 @@
 'use strict'
 
-var getSpecificType = require('./getSpecificType')
-var msg = require('./message')
+var printSpecificType = require('./getSpecificType')
+var is = require('./is')
+var errMsg = require('./error-message')
 var MUST_REQUIRE_SOMETHING = (
   'TYPEOF requires explicit type declarations. Use "void" to indicate '+
   'that no arguments may be passed.'
 )
 
-/**
- * Produces a cleaner stack (to avoid referencing TYPEOF's own functions).
- * @function
- * @param {String} msg
- * @return {undefined}
- */
-function throwErr(msg) {
-  var err = new TypeError(msg)
-  err.stack = (
-    err.stack
-      .split('\n')
-      .filter(function (line) { return line.indexOf('check.js') === -1; })
-      .join('\n')
-  )
-  throw err
+function checkDisjoint(arg, rq) {
+  return rq.some(function (rq) {
+    return check([arg], [rq])
+  })
 }
 
-/**
- * Checks a passed value against required type match.
- * @function
- * @param {*} required - native JS arguments object
- * @param {*} passed - native JS arguments object
- * @return {Boolean}
- */
-function checkNonDisjoint(required, passed) {
-  if (required === '*') return true
-  var reqType = getSpecificType(required, true)
-  var valType = getSpecificType(passed)
-  return reqType === valType
+function checkDuckType(arg, rq) {
+  return Object.keys(rq).every(function (key) {
+    return check([arg[key]], [rq[key]])
+  })
 }
 
-/**
- * Checks a shallow array for disjunctive type match with passed value.
- * @function
- * @param {*} required - native JS arguments object
- * @param {*} passed - native JS arguments object
- * @return {Boolean}
- */
-function checkDisjoint(required, passed) {
-  var reqTypes = required.map(getSpecificType, true)
-  var valType = getSpecificType(passed)
-  if (reqTypes.indexOf(valType) !== -1) return true
-  return false
+function checkCustomType(arg, rq) {
+  if (!is.other(arg)) return false
+  if (arg.constructor === rq) return true
+  if (arg.constructor.name === rq) return true
 }
 
-function duckType(required, passed, argNum) {
-  var props = Object.keys(required)
-  var reqArr = props.map(function (key) { return required[key]; })
-  var argArr = props.map(function (key) { return passed[key]; })
-  var context = {
-    required: required,
-    passed: passed,
-    argNum: argNum
-  }
-  check(argArr).apply(context, reqArr)
-}
+function check(args, rq) {
+  // void
+  if (rq[0] === 'void' && args.length === 0) return true
 
-/**
- * Ensures that the passed arguments match the requirements in arity,
- * type, and order.
- * @function
- * @this native JS arguments object
- * @return {undefined}
- */
-function check(passed) {
-  function checker() {
-    var this$1 = this;
+  // arity
+  if (rq.length !== args.length) return
 
-    if (!arguments.length) throw new Error(MUST_REQUIRE_SOMETHING)
-    var required = (arguments[0] === 'void') ? [] : arguments
-
-    // Check arity
-    if (passed.length !== required.length) throwErr(msg(required, passed))
-
-    // Check types
-    for (var i = 0; i < passed.length; i++) {
-      if (typeof required[i] === 'object' && required[i].constructor === Object) {
-        duckType(required[i], passed[i], i)
-      }
-      if (Array.isArray(required[i])) {
-        if (!checkDisjoint(required[i], passed[i])) {
-          throwErr(msg(required, passed, this$1))
-        }
-      } else {
-        if (!checkNonDisjoint(required[i], passed[i])) {
-          throwErr(msg(required, passed, this$1))
-        }
-      }
+  for (var i = 0; i < rq.length; i++) {
+    // kleene
+    if (rq[i] === '*') continue
+    // disjoint
+    if (is.disjoint(rq[i])) {
+      if (checkDisjoint(args[i], rq[i])) continue; return
     }
+    // duck types
+    if (is.duckType(rq[i])) {
+      if (checkDuckType(args[i], rq[i])) continue; return
+    }
+    // custom types
+    if (is.other(rq[i]) || typeof rq[i] === 'string') {
+      if (checkCustomType(args[i], rq[i])) continue; return
+    }
+    // native types
+    if (is.undefined(rq[i]) && !is.undefined(args[i])) return
+    if (is.null(rq[i]) && !is.null(args[i])) return
+    if (is.nan(rq[i]) && !is.nan(args[i])) return
+    if (is.number(rq[i]) && !is.number(args[i])) return
+    if (is.string(rq[i]) && !is.string(args[i])) return
+    if (is.boolean(rq[i]) && !is.boolean(args[i])) return
+    if (is.array(rq[i]) && !is.array(args[i])) return
+    if (is.object(rq[i]) && !is.object(args[i])) return
+    if (is.function(rq[i]) && !is.function(args[i])) return
   }
-  return checker
+  return true
 }
 
-module.exports = check
+module.exports = function (args) {
+  return function () {
+    if (!arguments.length) throw new Error(MUST_REQUIRE_SOMETHING)
+    if (!check(args, arguments)) throw new TypeError(errMsg(args, arguments))
+  }
+}

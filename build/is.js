@@ -88,3 +88,19 @@ exports.other = function (val) {
   }
   return false
 }
+
+exports.duckType = function (val) {
+  return (
+    val !== null &&
+    typeof val === 'object' &&
+    val.constructor === Object
+  )
+}
+
+exports.disjoint = function (val) {
+  return (
+    exports.array(val) &&
+    typeof val === 'object' &&
+    val.constructor === Array
+  )
+}
