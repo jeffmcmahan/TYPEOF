@@ -1,3 +1,5 @@
+'use strict'
+
 /*
 The aim is to provide type checks which do _not_ depend on ordered
 fall-through to get the type. This is less performant, but gives correct
@@ -87,4 +89,20 @@ exports.other = function (val) {
     return /[A-Z]/.test(value.name) && !exports.nativeConstructor(value)
   }
   return false
+}
+
+exports.duckType = function (val) {
+  return (
+    val !== null &&
+    typeof val === 'object' &&
+    val.constructor === Object
+  )
+}
+
+exports.disjoint = function (val) {
+  return (
+    exports.array(val) &&
+    typeof val === 'object' &&
+    val.constructor === Array
+  )
 }
