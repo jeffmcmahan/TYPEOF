@@ -1,6 +1,6 @@
 'use strict'
 
-const printSpecificType = require('./getSpecificType')
+const printSpecificType = require('./print-specific-type')
 const is = require('./is')
 const errMsg = require('./error-message')
 const MUST_REQUIRE_SOMETHING = (
