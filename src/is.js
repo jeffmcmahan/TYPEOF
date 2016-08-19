@@ -106,3 +106,12 @@ exports.disjoint = function (val) {
     val.constructor === Array
   )
 }
+
+exports.arrayLike = function (val) {
+  if (!exports.object(val)) return false
+  if (exports.array(val)) return true
+  return (
+    typeof val === 'object' ||
+    typeof val.length !== 'undefined'
+  )
+}
