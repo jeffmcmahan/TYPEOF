@@ -2,12 +2,23 @@
 
 Javascript is hostile to effective type checking. Exhibit A:
 
-* `'s' instanceof String // false`
-* `typeof [1, 2] // object`
-* `typeof null // object`
-* `typeof NaN // number`
+```js
+'s' instanceof String // false`
+```
 
-Manual type checks are categorically unmaintainable for codebases containing more than a dozen type-fussy functions. TYPEOF reduces type checking to rote declaration:
+```js
+typeof [1, 2] // object
+```
+
+```js
+typeof null // object
+```
+
+```js
+typeof NaN // number`
+```
+
+This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. TYPEOF reduces type checking to rote declaration:
 
 ```js
 function (name, weight, children) {
@@ -20,18 +31,31 @@ function (name, weight, children) {
 }
 ```
 
-While it's not actually declarative, it feels that way. By the act of stating the types, they are checked. And when an illicit argument is passed, you will see something like this above your stack trace:
+When illicit arguments are passed, there's no detective work:
 
 ```sh
-TypeError:
+TypeError: 
 
-  Required:  String, Number, Array
-  Provided:  String, String, Array
-                     ^^^^^^
+    Required:  String,  String,  Array
+    Provided:  String,  Number,  Object
+                        ^^^^^^   ^^^^^^
+                        2        {id:1234
+    
+    at yourFunction (/Users/.../yourFile.js:10:7)
+    at /Users/.../yourFile.js:13:3
+    at Object.<anonymous> (/Users/.../yourFile.js:15:2)
+    at Module._compile (module.js:541:32)
+    at Object.Module._extensions..js (module.js:550:10)
+    at Module.load (module.js:458:32)
+    at tryModuleLoad (module.js:417:12)
+    at Function.Module._load (module.js:409:3)
+    at Module.runMain (module.js:575:10)
+    ...
 ```
 
 ## Install
 Install from npm and start adding declarations to your functions.
+
 ```sh
 npm install typeof-arg
 ```
