@@ -10,24 +10,6 @@ void function () {
   function test() {
     TYPEOF
       (arguments)
-      ()
-  }
-
-  assert.throws(
-    test.bind(null),
-    /TYPEOF requires explicit type declarations/,
-    'Should throw when nothing is required.'
-  )
-
-}()
-
-//==============================================================================
-
-void function () {
-
-  function test() {
-    TYPEOF
-      (arguments)
       ('void')
   }
 
