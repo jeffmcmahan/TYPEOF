@@ -3,7 +3,7 @@
 Javascript is hostile to effective type checking. Exhibit A:
 
 ```js
-'s' instanceof String // false`
+'s' instanceof String // false
 ```
 
 ```js
@@ -15,7 +15,7 @@ typeof null // object
 ```
 
 ```js
-typeof NaN // number`
+typeof NaN // number
 ```
 
 This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. TYPEOF reduces type checking to rote declaration:
@@ -27,20 +27,20 @@ function (name, weight, children) {
     (arguments)
     (String, Number, Array)
 
-  // ...
+  return someValue;
 }
 ```
 
 When illicit arguments are passed, there's no detective work:
 
 ```sh
-TypeError: 
+TypeError:
 
     Required:  String,  String,  Array
     Provided:  String,  Number,  Object
                         ^^^^^^   ^^^^^^
                         2        {id:1234
-    
+
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
     at Object.<anonymous> (/Users/.../yourFile.js:15:2)
