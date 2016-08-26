@@ -108,10 +108,6 @@ exports.disjoint = function (val) {
 }
 
 exports.arrayLike = function (val) {
-  if (!exports.object(val)) return false
-  if (exports.array(val)) return true
-  return (
-    typeof val === 'object' ||
-    typeof val.length !== 'undefined'
-  )
+  if (typeof val !== 'object') return false
+  return typeof val.length !== 'undefined'
 }
