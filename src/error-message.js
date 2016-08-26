@@ -3,7 +3,6 @@
 const printSpecificType = require('./print-specific-type')
 const utils = require('./utils')
 const is = require('./is')
-const IDENT = '@@@@@@@@@@@'
 
 /**
  * Produces a JSON representation of duck-type requirement.
@@ -210,24 +209,7 @@ function errMsg(args, rq, violations) {
     Provided:  ${columnizer(argTypes)}
                ${columnizer(theDiff)}
                ${columnizer(theValues)}
-    ${IDENT}`)
-}
-
-/**
- * Removes the stack item which refers to the TYPEOF function.
- * @function
- * @param {String} stack
- * @return {String}
- */
-errMsg.filterStack = function (stack) {
-  stack = stack.split(IDENT)
-  const top = stack[0].replace('TypeError', 'TypeError thrown by TYPEOF')
-  const bottom = (
-    stack[1]
-      .trim().split('\n').slice(1)
-      .map(str => '    ' + str.trim()).join('\n')
-  )
-  return top + '\n' + bottom
+  `)
 }
 
 errMsg.NO_ARGS = (

@@ -155,9 +155,7 @@ module.exports = function (args) {
     if (!requirements.length) throw new Error(errMsg.NO_RQ)
     const violations = check(args, requirements)
     if (violations.length) {
-      const err = new TypeError(errMsg(args, requirements, violations))
-      err.stack = errMsg.filterStack(err.stack)
-      throw err
+      throw new TypeError(errMsg(args, requirements, violations))
     }
   }
 }
