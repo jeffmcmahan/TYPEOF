@@ -9,6 +9,8 @@ const is = require('./is')
  * @return {String}
  */
 function prettyJSON(obj) {
+  if (is.nan(obj)) return 'NaN'
+  if (is.undefined(obj)) return 'undefined'
   return (
     JSON.stringify(obj)
       .replace(/"/g, '')
@@ -28,6 +30,8 @@ function prettyJSON(obj) {
  * @return {String}
  */
 prettyJSON.tight = function (obj) {
+  if (is.nan(obj)) return 'NaN'
+  if (is.undefined(obj)) return 'undefined'
   return (
     JSON.stringify(obj)
       .replace(/"/g, '')
