@@ -3,7 +3,6 @@
 var printSpecificType = require('./print-specific-type')
 var utils = require('./utils')
 var is = require('./is')
-var IDENT = '@@@@@@@@@@@'
 
 /**
  * Produces a JSON representation of duck-type requirement.
@@ -205,24 +204,7 @@ function errMsg(args, rq, violations) {
   var theDiff = diff(argTypes, rqTypes)
   var theValues = badValues(violations, theDiff.length)
   var columnizer = columnize(argTypes, rqTypes, theDiff)
-  return (("\n\n    Required:  " + (columnizer(rqTypes)) + "\n    Provided:  " + (columnizer(argTypes)) + "\n               " + (columnizer(theDiff)) + "\n               " + (columnizer(theValues)) + "\n    " + IDENT))
-}
-
-/**
- * Removes the stack item which refers to the TYPEOF function.
- * @function
- * @param {String} stack
- * @return {String}
- */
-errMsg.filterStack = function (stack) {
-  stack = stack.split(IDENT)
-  var top = stack[0].replace('TypeError', 'TypeError thrown by TYPEOF')
-  var bottom = (
-    stack[1]
-      .trim().split('\n').slice(1)
-      .map(function (str) { return '    ' + str.trim(); }).join('\n')
-  )
-  return top + '\n' + bottom
+  return (("\n\n    Required:  " + (columnizer(rqTypes)) + "\n    Provided:  " + (columnizer(argTypes)) + "\n               " + (columnizer(theDiff)) + "\n               " + (columnizer(theValues)) + "\n  "))
 }
 
 errMsg.NO_ARGS = (
