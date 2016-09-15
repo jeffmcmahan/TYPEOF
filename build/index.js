@@ -1,5 +1,6 @@
 'use strict'
 
+var is = require('./is')
 var check = require('./check')
 var doNothing = function (){}
 var silent = false
@@ -12,6 +13,10 @@ var silent = false
  * @return {Function}
  */
 function API(passed) {
+  var others = [], len = arguments.length - 1;
+  while ( len-- > 0 ) others[ len ] = arguments[ len + 1 ];
+
+  if (others.length) throw new Error('One argument at a time.')
   return (silent ? doNothing : check(passed))
 }
 

@@ -2,8 +2,7 @@
 
 /*
 The aim is to provide type checks which do _not_ depend on ordered
-fall-through to get the type. This is less performant, but gives correct
-results.
+fall-through to get the type, and which do no rely [object <typename>]
 */
 
 exports.null = function (val) {
@@ -86,7 +85,7 @@ exports.other = function (val) {
   if (typeof val === 'function') value = val
   if (typeof val === 'object') value = val.constructor
   if (value) {
-    return /[A-Z]/.test(value.name) && !exports.nativeConstructor(value)
+    return /^[A-Z]/.test(value.name) && !exports.nativeConstructor(value)
   }
   return false
 }
@@ -110,4 +109,9 @@ exports.disjoint = function (val) {
 exports.arrayLike = function (val) {
   if (typeof val !== 'object') return false
   return typeof val.length !== 'undefined'
+}
+
+exports.arguments = function (val) {
+  if (typeof val !== 'object') return false
+  return Object.prototype.toString.call(val) === '[object Arguments]'
 }

@@ -2,6 +2,21 @@
 
 var is = require('./is')
 
+function printFirstProp(obj) {
+  if (is.array(obj)) {
+    if (!obj.length) return '[]'
+    if (obj[0] === obj) return '[0:circular...'
+    return '[0:' + prettyJSON(obj[0]) + '...'
+  }
+  if (is.object(obj)) {
+    var key = Object.keys(obj)[0]
+    if (!key) return '{}'
+    if (obj[key] === obj) return '{' + key + ':circular...'
+    return '{' + key + ':' + prettyJSON(obj[key]) + '...'
+  }
+  return '?'
+}
+
 /**
  * Prints a stylized, one-line JSON string.
  * @function
@@ -10,6 +25,7 @@ var is = require('./is')
  */
 function prettyJSON(obj) {
   if (is.nan(obj)) return 'NaN'
+  if (is.null(obj)) return 'null'
   if (is.undefined(obj)) return 'undefined'
   return (
     JSON.stringify(obj)
@@ -31,7 +47,10 @@ function prettyJSON(obj) {
  */
 prettyJSON.tight = function (obj) {
   if (is.nan(obj)) return 'NaN'
+  if (is.null(obj)) return 'null'
   if (is.undefined(obj)) return 'undefined'
+  if (is.array(obj)) return printFirstProp(obj)
+  if (is.object(obj)) return printFirstProp(obj)
   return (
     JSON.stringify(obj)
       .replace(/"/g, '')

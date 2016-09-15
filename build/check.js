@@ -13,7 +13,7 @@ var is = require('./is')
  * @return {Boolean}
  */
 function checkDisjoint(arg, rq) {
-  return rq.some(function (rq) { return check([arg], [rq]).length === 0; })
+  return rq.some(function (rq) { return !checkArg(arg, rq, 0); })
 }
 
 /**
@@ -25,7 +25,9 @@ function checkDisjoint(arg, rq) {
  * @return {Boolean}
  */
 function checkDuckType(arg, rq) {
-  return Object.keys(rq).every(function (key) { return check([arg[key]], [rq[key]]).length === 0; })
+  return (
+    Object.keys(rq).every(function (key) { return !checkArg(arg[key], rq[key], 0); })
+  )
 }
 
 /**
@@ -37,8 +39,7 @@ function checkDuckType(arg, rq) {
  * @return {Boolean}
  */
 function checkCustomType(arg, rq) {
-  if (!is.other(arg)) return false
-  if (arg.constructor === rq || arg.constructor.name === rq) return true
+  return is.other(arg) && arg.constructor === rq || arg.constructor.name === rq
 }
 
 /**
@@ -55,6 +56,71 @@ function argumentsToArray(argumentsObj) {
   return arr
 }
 
+function checkArg(arg, rq, n) {
+  if (rq === '*') return
+  if (is.disjoint(rq)) {
+    if (checkDisjoint(arg, rq)) return
+    return {n:n, v:arg}
+  } else if (is.duckType(rq)) {
+    if (checkDuckType(arg, rq)) return
+    return {n:n, v:arg}
+  } else if ((is.other(rq) || typeof rq === 'string')) {
+    if (checkCustomType(arg, rq)) return
+    return {n:n, v:arg}
+  } else if (is.undefined(rq) && !is.undefined(arg)) {
+    return {n:n, v:arg}
+  } else if (is.null(rq) && !is.null(arg)) {
+    return {n:n, v:arg}
+  } else if (is.nan(rq) && !is.nan(arg)) {
+    return {n:n, v:arg}
+  } else if (is.number(rq) && !is.number(arg)) {
+    return {n:n, v:arg}
+  } else if (is.string(rq) && !is.string(arg)) {
+    return {n:n, v:arg}
+  } else if (is.boolean(rq) && !is.boolean(arg)) {
+    return {n:n, v:arg}
+  } else if (is.array(rq) && !is.array(arg)) {
+    return {n:n, v:arg}
+  } else if (is.object(rq) && !is.object(arg)) {
+    return {n:n, v:arg}
+  } else if (is.function(rq) && !is.function(arg)) {
+    return {n:n, v:arg}
+  }
+}
+
+function checkVoid(args) {
+  if (is.arguments(args)) {
+    if (!args.length) return []
+    else return [{n:0, v:args[0]}]
+  } else {
+    throw new Error('The "void" type is only available for argumnets objects.')
+  }
+}
+
+function checkArgumentsObject(args, rq) {
+  args = argumentsToArray(args)
+  if (!args.length) return [{n:0, v:'void'}]
+  if (rq.length > args.length) {
+    return [{n:0, v:args[0]}]
+  }
+  if (rq.length < args.length) {
+    return args.map(function (arg, i) {
+      return {n:i, v:args[i]}
+    }).slice(rq.length)
+  }
+  var bad = []
+  for (var i = 0; i < rq.length; i++) {
+    bad = bad.concat(checkArg(args[i], rq[i], i) || [])
+  }
+  return bad
+}
+
+function checkSingleArgument(arg, rq) {
+  var violation = checkArg(arg, rq[0], 0)
+  if (violation) return [violation]
+  return []
+}
+
 /**
  * Examines a set of arguments and corresponding type requirements and returns
  * a set of indexed violating values.
@@ -63,76 +129,9 @@ function argumentsToArray(argumentsObj) {
  * @return {Array}
  */
 function check(args, rq) {
-  var bad = []
-
-  // void
-  if (rq[0] === 'void') rq = []
-  // arity
-  if (rq.length < args.length) {
-    return (
-      args
-        .map(function (arg, i) {return {n:i, v:args[i]}})
-        .slice(rq.length)
-      )
-  }
-
-  for (var i = 0; i < rq.length; i++) {
-    // kleene
-    if (rq[i] === '*' && (args.length - 1) >= [i]) continue
-    // disjoint
-    if (is.disjoint(rq[i])) {
-      if (!checkDisjoint(args[i], rq[i])) bad.push({n:i, v:args[i]})
-      continue
-    }
-    // duck types
-    if (is.duckType(rq[i])) {
-      if (!checkDuckType(args[i], rq[i])) bad.push({n:i, v:args[i]})
-      continue
-    }
-    // custom types
-    if (is.other(rq[i]) || typeof rq[i] === 'string') {
-      if (!checkCustomType(args[i], rq[i])) bad.push({n:i, v:args[i]})
-      continue
-    }
-    // native types
-    if (is.undefined(rq[i]) && !is.undefined(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.null(rq[i]) && !is.null(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.nan(rq[i]) && !is.nan(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.number(rq[i]) && !is.number(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.string(rq[i]) && !is.string(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.boolean(rq[i]) && !is.boolean(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.array(rq[i]) && !is.array(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.object(rq[i]) && !is.object(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-    if (is.function(rq[i]) && !is.function(args[i])) {
-      bad.push({n:i, v:args[i]})
-      continue
-    }
-  }
-  return bad
+  if (rq[0] === 'void') return checkVoid(args)
+  if (is.arguments(args)) return checkArgumentsObject(args, rq)
+  return checkSingleArgument(args, rq)
 }
 
 /**
@@ -141,10 +140,7 @@ function check(args, rq) {
  * @return {Function}
  */
 module.exports = function (args) {
-  if (arguments.length !== 1 || !is.arrayLike(args)) {
-    throw new Error(errMsg.NO_ARGS)
-  }
-  args = argumentsToArray(args)
+  if (arguments.length !== 1) throw new Error(errMsg.NO_ARGS)
 
   /**
    * Passes arguments to check() and throws if violations are found.
@@ -160,5 +156,6 @@ module.exports = function (args) {
     if (violations.length) {
       throw new TypeError(errMsg(args, requirements, violations))
     }
+    return args
   }
 }

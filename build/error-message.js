@@ -75,12 +75,19 @@ function getRqTypes(rq) {
  */
 function getArgTypes(args, rq) {
   var argTypes = []
-  if (!args.length) argTypes.push('void')
-  for (var i = 0; i < args.length; i++) {
-    if (is.duckType(rq[i])) {
-      argTypes.push(printDuckTypedArg(args[i], rq[i])); continue
+  if (typeof args === undefined) {
+    argTypes.push('void')
+  } else if (is.arguments(args) && !args.length) {
+    argTypes.push('void')
+  } else if (is.arguments(args) && args.length)  {
+    for (var i = 0; i < args.length; i++) {
+      if (is.duckType(rq[i])) {
+        argTypes.push(printDuckTypedArg(args[i], rq[i])); continue
+      }
+      argTypes.push(printSpecificType(args[i]))
     }
-    argTypes.push(printSpecificType(args[i]))
+  } else {
+    argTypes.push(printSpecificType(args))
   }
   return argTypes
 }
@@ -208,8 +215,7 @@ function errMsg(args, rq, violations) {
 }
 
 errMsg.NO_ARGS = (
-  'TYPEOF requires a single array-like argument: \n'+
-  '  TYPEOF(<array-like>)(type1, type2, ...)\n'
+  'TYPEOF requires a single argument: TYPEOF(<thing-to-check>)(type1, ...)\n'
 )
 
 errMsg.NO_RQ = (
