@@ -1,5 +1,6 @@
 'use strict'
 
+const is = require('./is')
 const check = require('./check')
 const doNothing = function (){}
 let silent = false
@@ -11,7 +12,8 @@ let silent = false
  * @param {Object} passed - native js arguments (array-like) object
  * @return {Function}
  */
-function API(passed) {
+function API(passed, ...others) {
+  if (others.length) throw new Error('One argument at a time.')
   return (silent ? doNothing : check(passed))
 }
 
