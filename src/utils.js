@@ -25,6 +25,7 @@ function printFirstProp(obj) {
  */
 function prettyJSON(obj) {
   if (is.nan(obj)) return 'NaN'
+  if (is.null(obj)) return 'null'
   if (is.undefined(obj)) return 'undefined'
   return (
     JSON.stringify(obj)
@@ -46,6 +47,7 @@ function prettyJSON(obj) {
  */
 prettyJSON.tight = function (obj) {
   if (is.nan(obj)) return 'NaN'
+  if (is.null(obj)) return 'null'
   if (is.undefined(obj)) return 'undefined'
   if (is.array(obj)) return printFirstProp(obj)
   if (is.object(obj)) return printFirstProp(obj)
