@@ -5,6 +5,20 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function () {TYPEOF({})(Object)},
+  'Should not throw when single matching arg is passed.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function () {TYPEOF({})(Array)},
+  'Should throw when single non-matching arg is passed.'
+)
+
+//==============================================================================
+
 function test(name, age, isTall, pets, props) {
   TYPEOF
     (arguments)

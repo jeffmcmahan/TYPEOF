@@ -5,6 +5,14 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.throws(
+  function () {TYPEOF()('void')},
+  /The "void" type is only available/,
+  'Should throw when nothing passed and void required.'
+)
+
+//==============================================================================
+
 void function () {
 
   function test() {
@@ -14,8 +22,8 @@ void function () {
   }
 
   assert.doesNotThrow(
-    test.bind(null),
-    'Should not throw if "void" is required and no argument is passed.'
+    test,
+    'Should throw if "void" is required and no argument is passed.'
   )
 
 }()

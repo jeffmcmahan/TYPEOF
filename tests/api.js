@@ -15,7 +15,7 @@ void function () {
 
   assert.throws(
     test.bind(null),
-    /TYPEOF requires a single array-like argument/,
+    /Use "void" to indicate that no values are permitted/,
     'Should throw when no argument is passed.'
   )
 
@@ -38,6 +38,23 @@ void function () {
   )
 
 }()
+
+//==============================================================================
+
+assert(
+  TYPEOF(1)(Number) === 1,
+  'Should return the value being checked.'
+)
+
+assert(
+  function test() {
+    const args = TYPEOF
+      (arguments)
+      (Number)
+    return args === arguments
+  }(1),
+  'Should return the value being checked (even arguments object).'
+)
 
 //==============================================================================
 

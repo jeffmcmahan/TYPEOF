@@ -5,6 +5,21 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function() {TYPEOF(1)([String, Number])},
+  'Should not throw when passed type is within the array.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function() {TYPEOF({})([String, Number])},
+  /Object/,
+  'Should throw when passed type is not within the array.'
+)
+
+//==============================================================================
+
 function test(amount) {
   TYPEOF
     (arguments)

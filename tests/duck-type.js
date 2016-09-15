@@ -5,6 +5,20 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function() {TYPEOF({a:'s'})({ a:String })},
+  'Should not throw when duck type matches.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function() {TYPEOF({a:1})({ a:String })},
+  'Should throw when duck type does not match.'
+)
+
+//==============================================================================
+
 function test(obj) {
   TYPEOF
     (arguments)

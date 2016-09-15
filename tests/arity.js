@@ -5,6 +5,14 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.throws(
+  function () {TYPEOF(1, 2)(Number, Number)},
+  /One argument at a time/,
+  'Should throw when more than one arg is passed.'
+)
+
+//==============================================================================
+
 void function () {
 
   function test() {

@@ -7,6 +7,34 @@ class NewClass {}
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function () {TYPEOF(new NewClass())(NewClass)},
+  'Should now throw when NewClass required and instance passed.'
+)
+
+//==============================================================================
+
+assert.doesNotThrow(
+  function () {TYPEOF(new NewClass())('NewClass')},
+  'Should now throw when "NewClass" required and instance passed.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function () {TYPEOF(new NewClass())('Other')},
+  'Should throw when "Other" required and NewClass instance passed.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function () {TYPEOF(new NewClass())(Array)},
+  'Should throw when Array required and NewClass instance passed.'
+)
+
+//==============================================================================
+
 void function () {
 
   function test() {

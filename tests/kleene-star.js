@@ -5,6 +5,13 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function () {TYPEOF({})('*')},
+  'Should not throw when single arg is passed and kleene star is required.'
+)
+
+//==============================================================================
+
 function test(amount) {
   TYPEOF
     (arguments)

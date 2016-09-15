@@ -5,6 +5,21 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
+assert.doesNotThrow(
+  function () {TYPEOF(undefined)(undefined)},
+  'Should not throw when undefined is required and undefined is passed.'
+)
+
+//==============================================================================
+
+assert.throws(
+  function () {TYPEOF(undefined)('void')},
+  /The "void" type is only available/,
+  'Should throw when undefined is passed and void is required.'
+)
+
+//==============================================================================
+
 void function () {
 
   function test() {
