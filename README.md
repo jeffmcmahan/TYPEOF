@@ -156,10 +156,10 @@ void function (num, str, arr) {
 ```
 
 ### TYPEOF.silence
-Avoid throwing errors in production by calling `TYPEOF.silence()`. This function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
+Avoid throwing errors in production by calling `TYPEOF.silence()`. The function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
 
 ### TYPEOF.silenceIf
-Conditionally avoid throwing errors in production by calling `TYPEOF.silenceIf`. This function takes one argument and always returns `undefined`.
+Conditionally avoid throwing errors in production by calling `TYPEOF.silenceIf`. The function takes one argument and always returns `undefined`.
 
 ```js
 TYPEOF.silenceIf(app.env !== 'dev')
