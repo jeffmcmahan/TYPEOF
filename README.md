@@ -146,13 +146,13 @@ checkFunc(Number) // 1
 If (and only if) the value passed to `TYPEOF` is a native `arguments` object, `check` will examine all of the values therein, checking them against the types passed to `check`. So:
 
 ```js
-void function (num, str, arr) {
+(function (num, str, arr) {
 
   TYPEOF
     (arguments)
     (Number, String, Array)
 
-}(1, 'string', [1, 2, 3])
+}(1, 'string', [1, 2, 3]))
 ```
 
 ### TYPEOF.silence
