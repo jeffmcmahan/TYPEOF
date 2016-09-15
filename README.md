@@ -35,7 +35,7 @@ function (name, weight, children) {
     (arguments)
     (String, Number, Array)
 
-  return someValue;
+  return someValue
 }
 ```
 
@@ -128,29 +128,23 @@ TYPEOF
 ```
 
 ## API
-
 ### TYPEOF()
-
-```TYPEOF``` takes one parameter of any type and returns the *check* function.
-
-So:
+```TYPEOF``` takes one parameter of any type and returns the *check* function. So:
 
 ```js
 TYPEOF(1) // Function
 ```
 
 ### check()
-The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure.
-
-So:
+The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure. So:
 
 ```js
-const checkFunc = TYPEOF(1) // Function
+const checkFunc = TYPEOF(1)
 checkFunc(Number) // 1
 ```
 
 ### TYPEOF.silence
-Avoid throwing errors in production by calling `TYPEOF.silence()`. This function takes no arguments and always returns `undefined`. TYPEOF will not throw, and will not check types, so there is no performance hit.
+Avoid throwing errors in production by calling `TYPEOF.silence()`. This function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
 
 ### TYPEOF.silenceIf
 Conditionally avoid throwing errors in production by calling `TYPEOF.silenceIf`. This function takes one argument and always returns `undefined`.
