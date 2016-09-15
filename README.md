@@ -1,11 +1,4 @@
 # Effective type checking in plain javascript.
-
-## Install
-
-```sh
-npm install typeof-arg
-```
-
 ## Introduction
 
 Javascript is hostile to effective type checking. Exhibit A:
