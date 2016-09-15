@@ -73,7 +73,7 @@ Moreover, TYPEOF *returns* the value being checked, so one can concisely check r
 function () {
 
   // ...
-  
+
   return TYPEOF(someVal)(Array)
 }
 ```
@@ -141,6 +141,18 @@ The check function takes a list of types or type names and it returns the value 
 ```js
 const checkFunc = TYPEOF(1)
 checkFunc(Number) // 1
+```
+
+If (and only if) the value passed to `TYPEOF` is a native `arguments` object, `check` will examine all of the values therein, checking them against the types passed to `check`. So:
+
+```js
+void function (num, str, arr) {
+
+  TYPEOF
+    (arguments)
+    (Number, String, Array)
+
+}(1, 'string', [1, 2, 3])
 ```
 
 ### TYPEOF.silence
