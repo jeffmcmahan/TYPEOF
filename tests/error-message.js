@@ -112,3 +112,10 @@ assert.doesNotThrow(
   function () {errMsg(circ, Number, [{n:0, v:circ}])},
   'Should handle circular values.'
 )
+
+assert(
+  errMsg(circ, Number, [{n:0, v:circ}]).indexOf('{p:circular') !== -1,
+  'Should indicate circularity.'
+)
+
+process.stdout.write('  ✔ Error message tests passed.\n')

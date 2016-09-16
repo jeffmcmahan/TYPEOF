@@ -9,6 +9,7 @@ require('./kleene-star')
 require('./custom-constructors')
 require('./disjunctions')
 require('./duck-type')
+require('./error-message')
 
 // ./api must go last.
 require('./api')
