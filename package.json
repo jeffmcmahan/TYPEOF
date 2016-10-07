@@ -1,10 +1,10 @@
 {
-  "name": "typeof-arg",
-  "version": "0.0.6",
+  "name": "type.of",
+  "version": "0.3.0",
   "description": "Effective type checking in plain javascript.",
   "main": "build/index.js",
   "scripts": {
-    "build": "buble -i src -o build && npm run test",
+    "build": "rm -rf build/* && buble -i src -o build && npm run test && npm run benchmark",
     "benchmark": "node tests/benchmark.js",
     "test": "node tests/index.js"
   },
