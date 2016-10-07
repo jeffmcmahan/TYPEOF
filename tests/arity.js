@@ -1,13 +1,12 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
 assert.throws(
   function () {TYPEOF(1, 2)(Number, Number)},
-  /One argument at a time/,
   'Should throw when more than one arg is passed.'
 )
 
@@ -28,7 +27,6 @@ void function () {
 
   assert.throws(
     test.bind(null, 1, 2),
-    /Number/,
     'Too many arguments.'
   )
 
@@ -51,7 +49,6 @@ void function () {
 
   assert.throws(
     test.bind(null, 1),
-    /Number/,
     'Too few arguments.'
   )
 

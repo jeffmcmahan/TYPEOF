@@ -1,7 +1,8 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
+class MyClass {}
 
 //==============================================================================
 
@@ -32,20 +33,30 @@ assert.doesNotThrow(
 
 assert.throws(
   test.bind(null, '1', {id:1, name:'Jo'}),
-  /String/,
   'Should throw when parameter other than ducktype is wrong.'
 )
 
 assert.throws(
-  test.bind(null, '1', 1),
-  /String/,
+  test.bind(null, 1, 1),
   'Should throw when non-object passed in ducktyped arg\'s position.'
 )
 
 assert.throws(
   test.bind(null, 1, {id:false, name:'Jo'}),
-  /{ id:Boolean, name:String }/,
   'Should throw when ducktype does not match passed object.'
+)
+
+//==============================================================================
+
+function test1(obj) {
+  TYPEOF
+    (arguments)
+    ({ myClass:'MyClass' })
+}
+
+assert.doesNotThrow(
+  test1.bind(null, { myClass: new MyClass() }),
+  'Should work with embedded custom constructors.'
 )
 
 process.stdout.write('  ✔ Duck-type requirement tests passed.\n')

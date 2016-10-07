@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
@@ -15,7 +15,6 @@ void function () {
 
   assert.throws(
     test.bind(null),
-    /Use "void" to indicate that no values are permitted/,
     'Should throw when no argument is passed.'
   )
 
@@ -33,7 +32,6 @@ void function () {
 
   assert.throws(
     test.bind(null),
-    /TYPEOF requires explicit declarations/,
     'Should throw when nothing is required.'
   )
 
@@ -68,7 +66,6 @@ void function () {
 
   assert.throws(
     test,
-    /void/,
     'Non-silent.'
   )
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
@@ -20,7 +20,6 @@ function test(amount) {
 
 assert.throws(
   test.bind(null),
-  /\*/,
   'Should throw when "*" is required but nothing is passed.'
 )
 

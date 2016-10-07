@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
@@ -14,7 +14,6 @@ assert.doesNotThrow(
 
 assert.throws(
   function() {TYPEOF({})([String, Number])},
-  /Object/,
   'Should throw when passed type is not within the array.'
 )
 
@@ -43,7 +42,6 @@ assert.doesNotThrow(
 
 assert.throws(
   test.bind(null, {}),
-  /Number\|String\|null/,
   'Should throw when the param type is not in the array.'
 )
 

@@ -1,14 +1,13 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
 assert.throws(
   function () {TYPEOF()('void')},
-  /The "void" type is only available/,
-  'Should throw when nothing passed and void required.'
+  'Should throw when nothing is checked.'
 )
 
 //==============================================================================
@@ -20,10 +19,10 @@ void function () {
       (arguments)
       ('void')
   }
-
+  
   assert.doesNotThrow(
     test,
-    'Should throw if "void" is required and no argument is passed.'
+    'Should not throw if "void" is required and no argument is passed.'
   )
 
 }()
@@ -40,7 +39,6 @@ void function () {
 
   assert.throws(
     test.bind(null, 'ILLICIT PARAMETER'),
-    /String/,
     'Should throw if "void" is required and an argument is passed.'
   )
 

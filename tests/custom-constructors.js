@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 class NewClass {}
 
@@ -50,7 +50,6 @@ void function () {
 
   assert.throws(
     test.bind(null, new Object()),
-    /NewClass/,
     'Should throw when an incorrect class is passed.'
   )
 
@@ -73,7 +72,6 @@ void function () {
 
   assert.throws(
     test.bind(null, new Object()),
-    /NewClass/,
     'Should throw when "NewClass" is required by name, but an Object is passed.'
   )
 

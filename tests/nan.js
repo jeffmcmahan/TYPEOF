@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../src')
+const TYPEOF = require('../')
 
 //==============================================================================
 
@@ -29,7 +29,6 @@ void function () {
 
   assert.throws(
     test.bind(null, NaN),
-    /NaN/,
     'Should throw when Number is required and NaN is passed.'
   )
 
