@@ -1,41 +1,92 @@
 'use strict'
 
-var is = require('./is')
-var check = require('./check')
-var doNothing = function (){}
+var typesMatch = require('./types-match')
 var silent = false
 
 /**
- * Returns either a bound TYPEOF function or a do-nothing function, depending
- * one whether type checking has been silenced or not.
- * @function
- * @param {Object} passed - native js arguments (array-like) object
+ * Alters a value to make it more suitable for printing to the console.
+ * @param {*} rq
+ * @return {*}
+ */
+function transformForConsole(rq) {
+  if (typeof rq === 'function') return rq.name
+  if (typeof rq === 'object' && rq.constructor === Object) {
+    Object.keys(rq).forEach(function (key) { return rq[key] = transformForConsole(rq[key]); })
+  }
+  if (Array.isArray(rq)) {
+    rq = rq.map(transformForConsole).join('|')
+  }
+  return rq
+}
+
+/**
+ * Removes the first line of the stack, since it will point to the TYPEOF
+ * function call rather than the type error itself.
+ * @param {*} stack
+ * @return {*} - if stack is not a string, it is returned unchanged
+ */
+function cleanStack(stack) {
+  if (typeof stack !== 'string') return stack
+  var lines = stack.split('\n')
+  var cleaned = false
+  return lines.filter(function (ln) {
+    if (ln.indexOf('.js') !== -1 && !cleaned) {
+      cleaned = true
+      return false
+    }
+    return true
+  }).join('\n')
+}
+
+/**
+ * Determines whether the given value is a native javascript Arguments object.
+ * @param {*} args
+ * @return {Boolean}
+ */
+function isArgumentsObject(args) {
+  return Object.prototype.toString.call(args).indexOf('Arguments') > -1
+}
+
+/**
+ * Top-level API.
+ * @param {*} args
  * @return {Function}
  */
-function API(passed) {
-  var others = [], len = arguments.length - 1;
-  while ( len-- > 0 ) others[ len ] = arguments[ len + 1 ];
+function TYPEOF(args) {
+  var passed = args
+  return function () {
+    var rqs = [], len = arguments.length;
+    while ( len-- ) rqs[ len ] = arguments[ len ];
 
-  if (others.length) throw new Error('One argument at a time.')
-  return (silent ? doNothing : check(passed))
+    if (silent) return
+    var pass = true
+    if (!rqs.length) pass = false
+    if (!isArgumentsObject(args)) args = [args]
+    if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) return
+    if (rqs.length !== args.length) pass = false
+    rqs.forEach(function (rq, i) {
+      if (!typesMatch(rq, args[i])) {
+        pass = false
+        console.log('\n  TypeError at argument #'+(i+1)+':\n')
+        console.log('  Required:', transformForConsole(rq))
+        console.log('  Provided:', args[i], '\n')
+      }
+    })
+    if (!pass) {
+      var err = new TypeError('')
+      err.stack = cleanStack(err.stack)
+      throw err
+    }
+    return passed
+  }
 }
 
-/**
- * Turns off type checking.
- * @method
- * @return {undefined}
- */
-API.silence = function () {silent = true}
+TYPEOF.silence = function () {
+  silent = true
+}
 
-/**
- * Turns off type checking if the condition is truthy.
- * @method
- * @param {Boolean} condition
- * @return {Boolean} - returns the condition's value
- */
-API.silenceIf = function (condition) {
+TYPEOF.silenceIf = function (condition) {
   if (condition) silent = true
-  return condition
 }
 
-module.exports = API
+module.exports = TYPEOF
