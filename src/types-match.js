@@ -23,7 +23,7 @@ module.exports = function typesMatch(type, value) {
   if (type === Boolean) return typeof value === 'boolean'
   if (type === String) return typeof value === 'string'
   if (type === Array) return Array.isArray(value)
-  if (type === Object) return value instanceof Object
+  if (type === Object) return value instanceof Object && !(value instanceof Array)
   if (type === Number) return typeof value === 'number' && !isNaN(value)
   if (type === Function) return typeof value === 'function'
   if (typeof type === 'number' && isNaN(type)) {
