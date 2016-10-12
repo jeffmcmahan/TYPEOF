@@ -6,7 +6,7 @@
  * less efficient.
  */
 
-const TYPEOF = require('../build')
+const TYPEOF = require('../src')
 
 function test(arg1, arg2, arg3, arg4, arg5) {
 

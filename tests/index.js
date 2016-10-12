@@ -9,8 +9,9 @@ require('./kleene-star')
 require('./custom-constructors')
 require('./disjunctions')
 require('./duck-type')
+require('./error-message')
 
 // ./api must go last.
 require('./api')
 
-process.stdout.write('  ✔ ALL TESTS PASSED.\n\n')
+process.stdout.write('  ✔ :)\n\n')

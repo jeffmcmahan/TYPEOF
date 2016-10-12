@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../')
+const TYPEOF = require('../src')
 
 class NewClass {}
 

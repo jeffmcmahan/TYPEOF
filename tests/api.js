@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../')
+const TYPEOF = require('../src')
 
 //==============================================================================
 
@@ -78,5 +78,18 @@ void function () {
 
 }()
 
+//==============================================================================
+
+assert.equal(
+  TYPEOF.match(String, 5),
+  false,
+  'Should return false when types don\'t match.'
+)
+
+assert.equal(
+  TYPEOF.match(String, '5'),
+  true,
+  'Should return true when types don\'t match.'
+)
 
 process.stdout.write('  ✔ API tests passed.\n')

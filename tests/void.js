@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const TYPEOF = require('../')
+const TYPEOF = require('../src')
 
 //==============================================================================
 
@@ -19,7 +19,7 @@ void function () {
       (arguments)
       ('void')
   }
-  
+
   assert.doesNotThrow(
     test,
     'Should not throw if "void" is required and no argument is passed.'

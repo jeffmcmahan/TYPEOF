@@ -1,121 +1,200 @@
 'use strict'
 
 const assert = require('assert')
-const errMsg = require('../src/error-message')
+const TYPEOF = require('../src')
 
 //==============================================================================
 
-assert(
-  errMsg(1, [Number], []).indexOf('Required:') !== -1,
-  'Should label "Required" types.'
-)
+void function () {
 
-assert(
-  errMsg(1, [Number], []).indexOf('Provided:') !== -1,
-  'Should label "Provided" types.'
-)
+  function test(flag) {
+    TYPEOF
+      (arguments)
+      (Boolean)
+  }
 
-//==============================================================================
-
-assert(
-  errMsg(1, [String], [{n:0, v:1}]).indexOf('^^^^^^') !== -1,
-  'Type mismatch for Number should contain 6 diff indicators ("^^^^^^").'
-)
-
-assert(
-  errMsg(1, [Number], []).indexOf('^') === -1,
-  'Type match should not contain diff indicators ("^^^^").'
-)
+  assert.throws(
+    test.bind(null, 'str'),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: boolean
+     Provided: 'str'`) !== -1
+    },
+    'Should report boolean type mismatch.'
+  )
+}()
 
 //==============================================================================
 
-assert(
-  errMsg(1, [String], [{n:0, v:1}]).indexOf('1') !== -1,
-  'Should print the value ("1") that was mismatched.'
-)
+void function () {
 
-assert(
-  errMsg([], [String], [{n:0, v:[]}]).indexOf('[]') !== -1,
-  'Should print the value ("[]") that was mismatched.'
-)
+  function test(num) {
+    TYPEOF
+      (arguments)
+      (Number)
+  }
 
-assert(
-  errMsg(false, [String], [{n:0, v:false}]).indexOf('false') !== -1,
-  'Should print the value ("false") that was mismatched.'
-)
-
-assert(
-  errMsg({}, [String], [{n:0, v:{}}]).indexOf('{}') !== -1,
-  'Should print the value ("{}") that was mismatched.'
-)
-
-const obj = {id:1, name:'Steve'}
-
-assert(
-  errMsg(obj, [String], [{n:0, v:obj}]).indexOf('{id:1...') !== -1,
-  'Should print part of the value ("{id:1...") that was mismatched.'
-)
+  assert.throws(
+    test.bind(null, 'str'),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: number
+     Provided: 'str'`) !== -1
+    },
+    'Should report number type mismatch.'
+  )
+}()
 
 //==============================================================================
 
-assert(
-  errMsg(1, [String], [{n:0, v:1}]).indexOf('Required:  String') !== -1,
-  'Required type should be "String".'
-)
+void function () {
 
-assert(
-  errMsg(1, [String], [{n:0, v:1}]).indexOf('Provided:  Number') !== -1,
-  'Provided type should be "Number".'
-)
+  function test(name) {
+    TYPEOF
+      (arguments)
+      (String)
+  }
 
-assert(
-  errMsg('1', [String], [{n:0, v:1}]).indexOf('Provided:  String') !== -1,
-  'Provided type should be "String".'
-)
-
-assert(
-  errMsg(false, [String], [{n:0, v:1}]).indexOf('Provided:  Boolean') !== -1,
-  'Provided type should be "Boolean".'
-)
-
-//==============================================================================
-
-assert(
-  errMsg({}, [String], [{n:0, v:1}]).indexOf('Provided:  Object') !== -1,
-  'Provided type should be "Object".'
-)
-
-assert(
-  errMsg([], [String], [{n:0, v:1}]).indexOf('Provided:  Array') !== -1,
-  'Provided type should be "Array".'
-)
-
-const inst = new (class NewClass {})()
-
-assert(
-  errMsg(inst, [String], [{n:0, v:1}]).indexOf('Provided:  NewClass') !== -1,
-  'Provided type should be "NewClass".'
-)
-
-assert(
-  errMsg({}, [{ id:Number, name:String }], [{n:0, v:1}])
-    .indexOf('Required:  { id:Number, name:String }') !== -1,
-  'Required type should be "{ id:Number, name:String }".'
-)
+  assert.throws(
+    test.bind(null, 1),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: string
+     Provided: 1`) !== -1
+    },
+    'Should report string type mismatch.'
+  )
+}()
 
 //==============================================================================
 
-const circ = {}
-circ.p = circ
+void function () {
 
-assert.doesNotThrow(
-  function () {errMsg(circ, Number, [{n:0, v:circ}])},
-  'Should handle circular values.'
-)
+  function test(arr) {
+    TYPEOF
+      (arguments)
+      (Array)
+  }
 
-assert(
-  errMsg(circ, Number, [{n:0, v:circ}]).indexOf('{p:circular') !== -1,
-  'Should indicate circularity.'
-)
+  assert.throws(
+    test.bind(null, {}),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: array
+     Provided: {}`) !== -1
+    },
+    'Should report array type mismatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(obj) {
+    TYPEOF
+      (arguments)
+      (Object)
+  }
+
+  assert.throws(
+    test.bind(null, []),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: Object
+     Provided: []`) !== -1
+    },
+    'Should report object type mismatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(name, age, isTall, pets, props) {
+    TYPEOF
+      (arguments)
+      (String, Number, Boolean, Array, Object)
+  }
+
+  assert.throws(
+    test.bind(null, false, '55', 'true', {}, []),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: string
+     Provided: false
+
+    Value (2):
+     Required: number
+     Provided: '55'
+
+    Value (3):
+     Required: boolean
+     Provided: 'true'
+
+    Value (4):
+     Required: array
+     Provided: {}
+
+    Value (5):
+     Required: Object
+     Provided: []`) !== -1
+    },
+    'Should throw 5 value diffs for 5 failures.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test({name, age}) {
+    TYPEOF
+      (arguments)
+      ({ name:String, age:Number })
+  }
+
+  assert.throws(
+    test.bind(null, {name:'Joe', age:'55'}),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: { name:string, age:number ... }
+     Provided: { name:string, age:string ... }`) !== -1
+    },
+    'Should be readable duck-type diff.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(numeric) {
+    TYPEOF
+      (arguments)
+      ([String, Number])
+  }
+
+  assert.throws(
+    test.bind(null, false),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: string|number
+     Provided: false`) !== -1
+    },
+    'Should be readable disjoint type diff.'
+  )
+}()
+
+//==============================================================================
 
 process.stdout.write('  ✔ Error message tests passed.\n')
