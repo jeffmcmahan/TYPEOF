@@ -1,6 +1,7 @@
 'use strict'
 
 var typesMatch = require('./types-match')
+var printValue = require('./print-value')
 var silent = false
 
 /**
@@ -12,9 +13,6 @@ function transformForConsole(rq) {
   if (typeof rq === 'function') return rq.name
   if (typeof rq === 'object' && rq.constructor === Object) {
     Object.keys(rq).forEach(function (key) { return rq[key] = transformForConsole(rq[key]); })
-  }
-  if (Array.isArray(rq)) {
-    rq = rq.map(transformForConsole).join('|')
   }
   return rq
 }
@@ -54,11 +52,13 @@ function isArgumentsObject(args) {
  */
 function TYPEOF(args) {
   var passed = args
-  return function () {
+
+  return function() {
     var rqs = [], len = arguments.length;
     while ( len-- ) rqs[ len ] = arguments[ len ];
 
     if (silent) return
+    var errMsg = ''
     var pass = true
     if (!rqs.length) pass = false
     if (!isArgumentsObject(args)) args = [args]
@@ -67,19 +67,21 @@ function TYPEOF(args) {
     rqs.forEach(function (rq, i) {
       if (!typesMatch(rq, args[i])) {
         pass = false
-        console.log('\n  TypeError at argument #'+(i+1)+':\n')
-        console.log('  Required:', transformForConsole(rq))
-        console.log('  Provided:', args[i], '\n')
+        errMsg += '\n    Value (' + (i + 1) + '):\n'
+        errMsg += '     Required: ' + printValue.rq(rq, true) + '\n'
+        errMsg += '     Provided: ' + printValue.arg(args[i]) + '\n'
       }
     })
     if (!pass) {
-      var err = new TypeError('')
+      var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
       throw err
     }
     return passed
   }
 }
+
+TYPEOF.match = typesMatch
 
 TYPEOF.silence = function () {
   silent = true
