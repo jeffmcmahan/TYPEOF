@@ -37,10 +37,9 @@ When illicit arguments are encountered, there's no detective work:
 ```sh
 TypeError:
 
-    Required:  String,  Number,  Array
-    Provided:  String,  String,  Object
-                        ^^^^^^   ^^^^^^
-                        heavy    {id:1...
+   Value (2):
+    Required: number
+    Provided: '164lbs.'
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
@@ -147,6 +146,9 @@ If (and only if) the value passed to `TYPEOF` is a native `arguments` object, `c
 
 }(1, 'string', [1, 2, 3]))
 ```
+
+### TYPEOF.match
+To have TYPEOF return a boolean to indicating pass/fail, instead of throwing an error, call `TYPEOF.match(<type>, <value>)`.
 
 ### TYPEOF.silence
 Avoid throwing errors in production by invoking `TYPEOF.silence`. The function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
