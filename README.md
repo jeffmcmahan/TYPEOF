@@ -60,7 +60,7 @@ TypeError:
 But it's not just for function parameters; it'll type check anything you give it:
 
 ```js
-TYPEOF(5)(Number) // ✓
+TYPEOF(5)(Number) // ✔
 ```
 
 Moreover, TYPEOF *returns* the value being checked, so one can concisely check return types:
@@ -142,7 +142,7 @@ The check function takes a list of types or type names and it returns the value 
 
 ```js
 const checkFunc = TYPEOF(1)
-checkFunc(Number) // ✓ - returns 1
+checkFunc(Number) // ✔ - returns 1
 
 // OR
 
@@ -162,7 +162,7 @@ function someFunc(num, str, arr) {
 
 }
 
-someFunc(1, 'string', [1, 2, 3]) // ✓
+someFunc(1, 'string', [1, 2, 3]) // ✔
 someFunc('1', false, {}) // throws
 ```
 
