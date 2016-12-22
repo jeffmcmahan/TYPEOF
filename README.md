@@ -23,7 +23,7 @@ typeof [1, 2]             // object   >:(
 true instanceof Boolean   // false    :/
 ```
 
-And many gotchas that make things especially difficult. Exhibit B:
+And there are many gotchas that make things especially difficult. For example, take Exhibit B:
 ```js
 function (length) {
 
