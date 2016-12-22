@@ -117,6 +117,8 @@ TYPEOF
 TYPEOF
   (arguments)
   ('*')
+
+// N.b.: this still enforces correct arity.
 ```
 
 ## API
