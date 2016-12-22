@@ -120,14 +120,14 @@ TYPEOF
 ```
 
 ## API
-### TYPEOF(value: any): function
+### `TYPEOF(value: any): function`
 ```TYPEOF``` takes one parameter of any type and returns the *check* function. So:
 
 ```js
 TYPEOF(1) // Function
 ```
 
-### check(type: any, ...): any
+### `check(type: any, ...): any`
 The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure. So:
 
 ```js
@@ -147,13 +147,13 @@ If (and only if) the value passed to `TYPEOF` is a native `arguments` object, it
 }(1, 'string', [1, 2, 3]))
 ```
 
-### TYPEOF.match(type: any, value: any): boolean
+### `TYPEOF.match(type: any, value: any): boolean`
 To have TYPEOF return a boolean instead of throwing an error on failure, call `TYPEOF.match(<type>, <value>)`.
 
-### TYPEOF.silence(): undefined
+### `TYPEOF.silence(): undefined`
 Avoid throwing errors in production by invoking `TYPEOF.silence`. The function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
 
-### TYPEOF.silenceIf(condition: boolean): undefined
+### `TYPEOF.silenceIf(condition: boolean): undefined`
 Conditionally avoid throwing errors in production by invoking `TYPEOF.silenceIf`. The function takes one argument and always returns `undefined`.
 
 ```js
