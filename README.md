@@ -11,17 +11,11 @@ Javascript is hostile to effective type checking. Exhibit A:
 
 ```js
 's' instanceof String // false
-```
 
-```js
 typeof [1, 2] // object
-```
 
-```js
 typeof null // object
-```
 
-```js
 typeof NaN // number
 ```
 
