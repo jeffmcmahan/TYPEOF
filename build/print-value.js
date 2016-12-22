@@ -3,6 +3,7 @@
 function printType(value, isRQ) {
   if ( isRQ === void 0 ) isRQ = false;
 
+  if (value === 'void') return 'void'
   if (value === null) return 'null'
   if (typeof value === 'undefined') return 'undefined'
   if (typeof value === 'string') return 'string'
@@ -21,9 +22,7 @@ function printType(value, isRQ) {
 function printObject(value) {
   var keys = Object.keys(value).slice(0,5).filter(function (key) { return value[key] !== value; })
   var obj= {}
-  keys.forEach(function (key) {
-    obj[key] = printType(value[key])
-  })
+  keys.forEach(function (key) { return obj[key] = printType(value[key]); })
   if (!keys.length) return '{}'
   return (
     JSON.stringify(obj, null, 2)
@@ -39,7 +38,7 @@ function printArray(value) {
   if (!value.length) return '[]'
   return (
     value.slice(0,3)
-      .map(function (val) { return printType(val); })
+      .map(printType)
       .join()
       .replace('[', '[ ')
       .replace(']', ', ... ]')
@@ -48,10 +47,8 @@ function printArray(value) {
 
 function printDuckType(rq) {
   var keys = Object.keys(rq)
-  var obj= {}
-  keys.forEach(function (key) {
-    obj[key] = exports.rq(rq[key])
-  })
+  var obj = {}
+  keys.forEach(function (key) { return obj[key] = exports.rq(rq[key]); })
   if (!keys.length) return '{}'
   return (
     JSON.stringify(obj, null, 2)
@@ -64,10 +61,11 @@ function printDuckType(rq) {
 }
 
 function printDisjoint(rq) {
-  return rq.map(function (type) { return exports.rq(type); }).join('|')
+  return rq.map(exports.rq).join('|')
 }
 
 exports.rq = function (rq) {
+  if (rq === 'void') return 'void'
   if (typeof rq === 'function') {
     if (['String', 'Array', 'Boolean', 'Number', 'Function'].indexOf(rq.name) !== -1) {
       return rq.name.toLowerCase()

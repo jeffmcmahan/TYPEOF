@@ -3,6 +3,7 @@
 var typesMatch = require('./types-match')
 var printValue = require('./print-value')
 var silent = false
+var warn = false
 
 /**
  * Alters a value to make it more suitable for printing to the console.
@@ -67,28 +68,25 @@ function TYPEOF(args) {
     rqs.forEach(function (rq, i) {
       if (!typesMatch(rq, args[i])) {
         pass = false
+        var isVoid = args.length < i + 1
         errMsg += '\n    Value (' + (i + 1) + '):\n'
         errMsg += '     Required: ' + printValue.rq(rq, true) + '\n'
-        errMsg += '     Provided: ' + printValue.arg(args[i]) + '\n'
+        errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
     if (!pass) {
       var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      throw err
+      if (!warn) throw err
+      else console.log(err)
     }
     return passed
   }
 }
 
 TYPEOF.match = typesMatch
-
-TYPEOF.silence = function () {
-  silent = true
-}
-
-TYPEOF.silenceIf = function (condition) {
-  if (condition) silent = true
-}
+TYPEOF.warn = function () {warn = true}
+TYPEOF.silence = function () {silent = true}
+TYPEOF.silenceIf = function (condition) {if (condition) silent = true}
 
 module.exports = TYPEOF
