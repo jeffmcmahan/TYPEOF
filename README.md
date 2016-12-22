@@ -19,7 +19,7 @@ typeof null // object
 typeof NaN // number
 ```
 
-This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. Attempts check types carefully and thoroughly without any tools can result in rather [grotesque code](https://www.joyent.com/node-js/production/design/errors#an-example). TYPEOF reduces type checking of function parameters to rote declaration:
+This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. Attempts to check types carefully and thoroughly without any tools can result in rather [grotesque code](https://www.joyent.com/node-js/production/design/errors#an-example). TYPEOF reduces type checking of function parameters to rote declaration:
 
 ```js
 function (name, weight, children) {
@@ -135,7 +135,7 @@ const checkFunc = TYPEOF(1)
 checkFunc(Number) // 1
 ```
 
-If (and only if) the value passed to `TYPEOF` is a native `arguments` object, `check` will examine all of the values therein, checking them against the types passed to `check`. So:
+If (and only if) the value passed to `TYPEOF` is a native `arguments` object, it will check each of the values therein against the corresponding type passed to `check`. So:
 
 ```js
 (function (num, str, arr) {
@@ -148,7 +148,7 @@ If (and only if) the value passed to `TYPEOF` is a native `arguments` object, `c
 ```
 
 ### TYPEOF.match
-To have TYPEOF return a boolean to indicating pass/fail, instead of throwing an error, call `TYPEOF.match(<type>, <value>)`.
+To have TYPEOF return a boolean instead of throwing an error on failure, call `TYPEOF.match(<type>, <value>)`.
 
 ### TYPEOF.silence
 Avoid throwing errors in production by invoking `TYPEOF.silence`. The function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
