@@ -91,7 +91,7 @@ TYPEOF is not intended to guarantee the correctness of a program. That is not ho
 <hr/>
 
 ## Examples
-### Native Constructors
+### Native Types
 ```js
 TYPEOF
   (arguments)
@@ -114,7 +114,7 @@ TYPEOF
   ([String, Number])
 ```
 
-### Custom Constructors
+### Non-Native Types
 ```js
 TYPEOF
   (arguments)
