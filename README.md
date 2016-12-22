@@ -87,7 +87,7 @@ function () {
 ```
 <hr/>
 ## N.b.: Here's what it isn't.
-TYPEOF is not intended to guarantee the correctness of a program. That is not how javascript works, and not how I wish to work. TYPEOF sharply limits the variety and incidence of runtime mischief. It also improves enormously the quality of feedback provided by the console when something bad happens. That is, it delivers the benefits of correctness, but not correctness itself. *Just so.*
+TYPEOF is not intended to guarantee the correctness of a program. That is not how javascript works, and not how I wish to work. TYPEOF sharply limits the variety and incidence of runtime mischief. It also improves enormously the quality of feedback provided by the console when something bad happens. In other words, it delivers the benefits of correctness without correctness as such.
 <hr/>
 
 ## Examples
