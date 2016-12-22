@@ -70,6 +70,9 @@ function () {
 }
 ```
 
+## What TYPEOF isn't:
+TYPEOF is not intended to guarantee the correctness of a program. That is not how javascript works, and not how I wish to work. TYPEOF sharply limits the variety and incidence of runtime mischief.
+
 ## Examples
 ### Native Constructors
 ```js
