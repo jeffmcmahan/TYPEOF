@@ -135,6 +135,9 @@ The check function takes a list of types or type names and it returns the value 
 ```js
 const checkFunc = TYPEOF(1)
 checkFunc(Number) // 1
+
+// OR
+checkFunc(Boolean) // throws
 ```
 
 If (and only if) the value passed to `TYPEOF` is a native `arguments` object, it will check each of the values therein against the corresponding type passed to `check`. So:
