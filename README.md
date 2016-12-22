@@ -19,7 +19,7 @@ typeof null // object
 typeof NaN // number
 ```
 
-This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. TYPEOF reduces type checking of function parameters to rote declaration:
+This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. Attempts check types carefully and thoroughly without any tools can result in rather [grotesque code](https://www.joyent.com/node-js/production/design/errors#an-example). TYPEOF reduces type checking of function parameters to rote declaration:
 
 ```js
 function (name, weight, children) {
