@@ -1,4 +1,10 @@
 # Effective type checking in plain javascript.
+## Install
+```sh
+npm install type.of
+```
+
+
 ## Introduction
 
 Javascript is hostile to effective type checking. Exhibit A:
