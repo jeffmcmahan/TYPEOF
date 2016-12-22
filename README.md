@@ -1,4 +1,6 @@
 # Effective type checking in plain javascript.
+There is no compile step. TYPEOF is a *function.* Not a new language.
+
 ## Install
 ```sh
 npm install type.of
