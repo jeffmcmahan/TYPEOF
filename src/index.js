@@ -84,6 +84,5 @@ function TYPEOF(args) {
 TYPEOF.match = typesMatch
 TYPEOF.warn = function () {warn = true}
 TYPEOF.silence = function () {silent = true}
-TYPEOF.silenceIf = function (condition) {if (condition) silent = true}
 
 module.exports = TYPEOF

@@ -11,7 +11,7 @@ var warn = false
  * @return {*}
  */
 function transformForConsole(rq) {
-  if (typeof rq === 'function') return rq.name
+  if (typeof rq === 'function') { return rq.name }
   if (typeof rq === 'object' && rq.constructor === Object) {
     Object.keys(rq).forEach(function (key) { return rq[key] = transformForConsole(rq[key]); })
   }
@@ -25,7 +25,7 @@ function transformForConsole(rq) {
  * @return {*} - if stack is not a string, it is returned unchanged
  */
 function cleanStack(stack) {
-  if (typeof stack !== 'string') return stack
+  if (typeof stack !== 'string') { return stack }
   var lines = stack.split('\n')
   var cleaned = false
   return lines.filter(function (ln) {
@@ -58,13 +58,13 @@ function TYPEOF(args) {
     var rqs = [], len = arguments.length;
     while ( len-- ) rqs[ len ] = arguments[ len ];
 
-    if (silent) return
+    if (silent) { return }
     var errMsg = ''
     var pass = true
-    if (!rqs.length) pass = false
-    if (!isArgumentsObject(args)) args = [args]
-    if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) return
-    if (rqs.length !== args.length) pass = false
+    if (!rqs.length) { pass = false }
+    if (!isArgumentsObject(args)) { args = [args] }
+    if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) { return }
+    if (rqs.length !== args.length) { pass = false }
     rqs.forEach(function (rq, i) {
       if (!typesMatch(rq, args[i])) {
         pass = false
@@ -77,8 +77,8 @@ function TYPEOF(args) {
     if (!pass) {
       var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      if (!warn) throw err
-      else console.log(err)
+      if (!warn) { throw err }
+      else { console.log(err) }
     }
     return passed
   }
@@ -87,6 +87,5 @@ function TYPEOF(args) {
 TYPEOF.match = typesMatch
 TYPEOF.warn = function () {warn = true}
 TYPEOF.silence = function () {silent = true}
-TYPEOF.silenceIf = function (condition) {if (condition) silent = true}
 
 module.exports = TYPEOF

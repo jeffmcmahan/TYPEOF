@@ -160,12 +160,3 @@ To have TYPEOF return a boolean instead of throwing an error on failure, call `T
 
 ### `TYPEOF.silence(): undefined`
 Avoid throwing errors in production by invoking `TYPEOF.silence`. The function takes no arguments and always returns `undefined`. Once silenced, TYPEOF will not throw, and will not check types, so there is no performance hit.
-
-### `TYPEOF.silenceIf(condition: boolean): undefined`
-Conditionally avoid throwing errors in production by invoking `TYPEOF.silenceIf`. The function takes one argument and always returns `undefined`.
-
-```js
-TYPEOF.silenceIf(app.env !== 'dev')
-```
-
-If the value passed is truthy, TYPEOF will not throw, and will not check types, so there is no performance hit.
