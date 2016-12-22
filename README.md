@@ -27,9 +27,9 @@ true instanceof Boolean   // false    :/
 
 And there are many gotchas that make things especially difficult. For example, take Exhibit B:
 ```js
-function (length) {
+function someFunc(length) {
 
-  if (length === NaN) throw new Error("Can't be NaN!")
+  if (length === NaN) throw new Error("Length can't be NaN!")
 
   // ...
 
