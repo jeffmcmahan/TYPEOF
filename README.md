@@ -150,13 +150,16 @@ checkFunc(Boolean) // throws
 If (and only if) the value passed to `TYPEOF` is a native `arguments` object, it will check each of the values therein against the corresponding type passed to `check`. So:
 
 ```js
-(function (num, str, arr) {
+function someFunc(num, str, arr) {
 
   TYPEOF
     (arguments)
     (Number, String, Array)
 
-}(1, 'string', [1, 2, 3]))
+}
+
+someFunc(1, 'string', [1, 2, 3]) // all good
+someFunc('1', false, {}) // throws
 ```
 
 ### `TYPEOF.match(type: any, value: any): boolean`
