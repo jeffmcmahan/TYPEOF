@@ -73,9 +73,10 @@ function () {
   return TYPEOF(someVal)(Array)
 }
 ```
-
-## Here's what it isn't.
+<hr/>
+## N.b.: Here's what it isn't.
 TYPEOF is not intended to guarantee the correctness of a program. That is not how javascript works, and not how I wish to work. TYPEOF sharply limits the variety and incidence of runtime mischief. It also improves enormously the quality of feedback provided by the console when such mischief is encountered.
+<hr/>
 
 ## Examples
 ### Native Constructors
@@ -137,13 +138,14 @@ TYPEOF(1) // Function
 ```
 
 ### `check(type: any, ...): any`
-The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure. So:
+The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure. So, one could do the following:
 
 ```js
 const checkFunc = TYPEOF(1)
 checkFunc(Number) // 1
 
 // OR
+
 checkFunc(Boolean) // throws
 ```
 
