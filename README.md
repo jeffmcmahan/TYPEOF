@@ -10,13 +10,17 @@ npm install type.of
 Javascript is hostile to effective type checking. Exhibit A:
 
 ```js
-'s' instanceof String // false
+typeof null               // object   >:(
 
-typeof [1, 2] // object
+typeof NaN                // number   :?
 
-typeof null // object
+typeof [1, 2]             // object   >:(
 
-typeof NaN // number
+'s' instanceof String     // false    :/
+
+5 instanceof Number       // false    :/
+
+true instanceof Boolean   // false    :/
 ```
 
 This makes type checks of the usual kind categorically unmaintainable for codebases containing more than a dozen type-fussy functions. Attempts to check types carefully and thoroughly without any tools can result in rather [grotesque code](https://www.joyent.com/node-js/production/design/errors#an-example). TYPEOF reduces type checking of function parameters to rote declaration:
