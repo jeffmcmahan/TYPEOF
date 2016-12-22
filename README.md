@@ -161,7 +161,7 @@ TYPEOF
 TYPEOF(1) // Function
 ```
 
-### `check(type: any, ...): any`
+### `check(type1: any, type2: any, ...): any`
 The check function takes a list of types or type names and it returns the value that was passed to `TYPEOF`. That is, unless it throws an error upon type check failure. So, one could do the following:
 
 ```js
