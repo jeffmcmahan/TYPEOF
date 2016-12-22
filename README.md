@@ -156,6 +156,8 @@ function someFunc(num, str, arr) {
     (arguments)
     (Number, String, Array)
 
+  // Do whatever.
+
 }
 
 someFunc(1, 'string', [1, 2, 3]) // all good
