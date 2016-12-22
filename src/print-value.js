@@ -1,6 +1,7 @@
 'use strict'
 
 function printType(value, isRQ = false) {
+  if (value === 'void') return 'void'
   if (value === null) return 'null'
   if (typeof value === 'undefined') return 'undefined'
   if (typeof value === 'string') return 'string'
@@ -19,9 +20,7 @@ function printType(value, isRQ = false) {
 function printObject(value) {
   const keys = Object.keys(value).slice(0,5).filter(key => value[key] !== value)
   const obj= {}
-  keys.forEach(key => {
-    obj[key] = printType(value[key])
-  })
+  keys.forEach(key => obj[key] = printType(value[key]))
   if (!keys.length) return '{}'
   return (
     JSON.stringify(obj, null, 2)
@@ -37,7 +36,7 @@ function printArray(value) {
   if (!value.length) return '[]'
   return (
     value.slice(0,3)
-      .map(val => printType(val))
+      .map(printType)
       .join()
       .replace('[', '[ ')
       .replace(']', ', ... ]')
@@ -46,10 +45,8 @@ function printArray(value) {
 
 function printDuckType(rq) {
   const keys = Object.keys(rq)
-  const obj= {}
-  keys.forEach(key => {
-    obj[key] = exports.rq(rq[key])
-  })
+  const obj = {}
+  keys.forEach(key => obj[key] = exports.rq(rq[key]))
   if (!keys.length) return '{}'
   return (
     JSON.stringify(obj, null, 2)
@@ -62,10 +59,11 @@ function printDuckType(rq) {
 }
 
 function printDisjoint(rq) {
-  return rq.map(type => exports.rq(type)).join('|')
+  return rq.map(exports.rq).join('|')
 }
 
 exports.rq = function (rq) {
+  if (rq === 'void') return 'void'
   if (typeof rq === 'function') {
     if (['String', 'Array', 'Boolean', 'Number', 'Function'].indexOf(rq.name) !== -1) {
       return rq.name.toLowerCase()

@@ -197,4 +197,118 @@ void function () {
 
 //==============================================================================
 
+void function () {
+
+  function test(undef) {
+    TYPEOF
+      (arguments)
+      (undefined)
+  }
+
+  assert.throws(
+    test.bind(null, null),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: undefined
+     Provided: null`) !== -1
+    },
+    'Should report undefined mistmatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(str) {
+    TYPEOF
+      (arguments)
+      ('void')
+  }
+
+  assert.throws(
+    test.bind(null, 'yo'),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: void
+     Provided: 'yo'`) !== -1
+    },
+    'Should report void mistmatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(str) {
+    TYPEOF
+      (arguments)
+      (String)
+  }
+
+  assert.throws(
+    test.bind(null),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: string
+     Provided: void`) !== -1
+    },
+    'Should report void mistmatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(str) {
+    TYPEOF
+      (arguments)
+      (String, Number)
+  }
+
+  assert.throws(
+    test.bind(null),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: string
+     Provided: void
+
+    Value (2):
+     Required: number
+     Provided: void`) !== -1
+    },
+    'Should report multiple void arguments mistmatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test(nul) {
+    TYPEOF
+      (arguments)
+      (null)
+  }
+
+  assert.throws(
+    test.bind(null, undefined),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: null
+     Provided: undefined`) !== -1
+    },
+    'Should report null mismatch.'
+  )
+}()
+
+//==============================================================================
+
 process.stdout.write('  ✔ Error message tests passed.\n')
