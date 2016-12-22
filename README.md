@@ -147,7 +147,7 @@ If (and only if) the value passed to `TYPEOF` is a native `arguments` object, it
 }(1, 'string', [1, 2, 3]))
 ```
 
-### TYPEOF.match(type: any, value: any) :boolean
+### TYPEOF.match(type: any, value: any): boolean
 To have TYPEOF return a boolean instead of throwing an error on failure, call `TYPEOF.match(<type>, <value>)`.
 
 ### TYPEOF.silence(): undefined
