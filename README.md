@@ -150,8 +150,14 @@ TYPEOF
   (arguments)
   ('*')
 
-// N.b.: this still enforces correct arity.
+// Works for duck-types and unions, too:
+
+TYPEOF
+  (arguments)
+  ({ someProp:'*' })
 ```
+
+**N.b.:** A Wild card still enforces correct arity, so passing *nothing* to a function with a wildcard type specification will throw. That us, a wild card means *anything*&#8212;not *anything or nothing*.
 
 ## API
 ### `TYPEOF(value: any): function`
