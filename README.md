@@ -95,7 +95,9 @@ TYPEOF is not intended to guarantee the correctness of a program. That is not ho
 ```js
 TYPEOF
   (arguments)
-  (Boolean, String, Number, Array, Object, Function, ArrayBuffer)
+  (Boolean, String, Number, Array, Object, Function, ArrayBuffer, ...)
+
+// Any native type will work.
 ```
 
 ### Duck-Typing
@@ -123,6 +125,16 @@ TYPEOF
 TYPEOF
   (arguments)
   ('MyType')
+
+// Can be used in duck types and unions too:
+
+TYPEOF
+  (arguments)
+  ({ id:'MyType', cost:MyOtherType })
+
+TYPEOF
+  (arguments)
+  (['MyType', MyOtherType])
 ```
 
 ### Void
