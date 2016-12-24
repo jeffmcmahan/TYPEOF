@@ -20,10 +20,9 @@ function transformForConsole(rq) {
 }
 
 /**
- * Removes the first line of the stack, since it will point to the TYPEOF
- * function call rather than the type error itself.
+ * Zaps first line of the stack, as it points to TYPEOF, not the error line.
  * @param {*} stack
- * @return {*} - if stack is not a string, it is returned unchanged
+ * @return {String|Object} - if stack is not a string, it is returned unchanged
  */
 function cleanStack(stack) {
   if (typeof stack !== 'string') { return stack }
@@ -38,21 +37,10 @@ function cleanStack(stack) {
   }).join('\n')
 }
 
-/**
- * Accepts the values to be checked and returns the check function.
- * @NOTE Accepts indefinitely many arguments of any type.
- * @return {Function}
- */
 function TYPEOF() {
   var args = [], len = arguments.length;
   while ( len-- ) args[ len ] = arguments[ len ];
 
-
-  /**
-   * The check function.
-   * @NOTE Accepts indefinitely many arguments of any type.
-   * @return {*} - the first value in args
-   */
   return function() {
     var rqs = [], len = arguments.length;
     while ( len-- ) rqs[ len ] = arguments[ len ];
@@ -60,8 +48,6 @@ function TYPEOF() {
     if (off) { return args[0] }
     var errMsg = ''
     var pass = true
-
-    // Check
     if (!rqs.length) { pass = false }
     if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) { return }
     if (rqs.length !== args.length) { pass = false }
@@ -74,17 +60,13 @@ function TYPEOF() {
         errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
-
-    // Report failure.
-    if (!pass) {
+    if (!pass) { // Report failure.
       var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      console.log(onFail)
       if (onFail) { onFail(err) }
       if (warn) { console.log(err) }
       else { throw err }
     }
-
     return args[0]
   }
 }
