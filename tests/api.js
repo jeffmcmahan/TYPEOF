@@ -26,7 +26,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       ()
   }
 
@@ -47,11 +47,11 @@ assert(
 assert(
   function test() {
     const args = TYPEOF
-      (arguments)
+      (...arguments)
       (Number)
-    return args === arguments
+    return args === 1
   }(1),
-  'Should return the value being checked (even arguments object).'
+  'Should return the first value being checked.'
 )
 
 //==============================================================================
@@ -60,7 +60,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Number)
   }
 
@@ -69,7 +69,7 @@ void function () {
     'Non-silent.'
   )
 
-  TYPEOF.silence()
+  TYPEOF.OFF()
 
   assert.doesNotThrow(
     test.bind(null),
@@ -77,19 +77,5 @@ void function () {
   )
 
 }()
-
-//==============================================================================
-
-assert.equal(
-  TYPEOF.match(String, 5),
-  false,
-  'Should return false when types don\'t match.'
-)
-
-assert.equal(
-  TYPEOF.match(String, '5'),
-  true,
-  'Should return true when types don\'t match.'
-)
 
 process.stdout.write('  ✔ API tests passed.\n')

@@ -8,28 +8,28 @@ class NewClass {}
 //==============================================================================
 
 assert.doesNotThrow(
-  function () {TYPEOF(new NewClass())(NewClass)},
+  _=> TYPEOF(new NewClass())(NewClass),
   'Should now throw when NewClass required and instance passed.'
 )
 
 //==============================================================================
 
 assert.doesNotThrow(
-  function () {TYPEOF(new NewClass())('NewClass')},
+  _=> TYPEOF(new NewClass())('NewClass'),
   'Should now throw when "NewClass" required and instance passed.'
 )
 
 //==============================================================================
 
 assert.throws(
-  function () {TYPEOF(new NewClass())('Other')},
+  _=> TYPEOF(new NewClass())('Other'),
   'Should throw when "Other" required and NewClass instance passed.'
 )
 
 //==============================================================================
 
 assert.throws(
-  function () {TYPEOF(new NewClass())(Array)},
+  _=> TYPEOF(new NewClass())(Array),
   'Should throw when Array required and NewClass instance passed.'
 )
 
@@ -39,7 +39,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (NewClass) // By reference
   }
 
@@ -61,7 +61,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       ('NewClass') // By name
   }
 

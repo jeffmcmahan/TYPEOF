@@ -9,7 +9,7 @@ void function () {
 
   function test(flag) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Boolean)
   }
 
@@ -31,7 +31,7 @@ void function () {
 
   function test(num) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Number)
   }
 
@@ -53,7 +53,7 @@ void function () {
 
   function test(name) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (String)
   }
 
@@ -75,7 +75,7 @@ void function () {
 
   function test(arr) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Array)
   }
 
@@ -97,7 +97,7 @@ void function () {
 
   function test(obj) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Object)
   }
 
@@ -119,7 +119,7 @@ void function () {
 
   function test(name, age, isTall, pets, props) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (String, Number, Boolean, Array, Object)
   }
 
@@ -157,7 +157,7 @@ void function () {
 
   function test({name, age}) {
     TYPEOF
-      (arguments)
+      (...arguments)
       ({ name:String, age:Number })
   }
 
@@ -179,7 +179,7 @@ void function () {
 
   function test(numeric) {
     TYPEOF
-      (arguments)
+      (...arguments)
       ([String, Number])
   }
 
@@ -201,7 +201,7 @@ void function () {
 
   function test(undef) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (undefined)
   }
 
@@ -223,7 +223,7 @@ void function () {
 
   function test(str) {
     TYPEOF
-      (arguments)
+      (...arguments)
       ('void')
   }
 
@@ -245,7 +245,7 @@ void function () {
 
   function test(str) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (String)
   }
 
@@ -267,7 +267,7 @@ void function () {
 
   function test(str) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (String, Number)
   }
 
@@ -293,7 +293,7 @@ void function () {
 
   function test(nul) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (null)
   }
 

@@ -5,18 +5,11 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
-assert.throws(
-  function () {TYPEOF(1, 2)(Number, Number)},
-  'Should throw when more than one arg is passed.'
-)
-
-//==============================================================================
-
 void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Number)
   }
 
@@ -38,7 +31,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Number, Number)
   }
 

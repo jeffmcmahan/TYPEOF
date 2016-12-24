@@ -5,18 +5,11 @@ const TYPEOF = require('../src')
 
 //==============================================================================
 
-assert.throws(
-  function () {TYPEOF()('void')},
-  'Should throw when nothing is checked.'
-)
-
-//==============================================================================
-
 void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       ('void')
   }
 
@@ -33,7 +26,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       ('void')
   }
 

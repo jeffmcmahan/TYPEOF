@@ -38,28 +38,16 @@ function cleanStack(stack) {
 }
 
 /**
- * Determines whether the given value is a native javascript Arguments object.
- * @param {*} args
- * @return {Boolean}
- */
-function isArgumentsObject(args) {
-  return Object.prototype.toString.call(args).indexOf('Arguments') > -1
-}
-
-/**
  * Top-level API.
  * @param {*} args
  * @return {Function}
  */
-function TYPEOF(args) {
-  const passed = args
-
+function TYPEOF(...args) {
   return function(...rqs) {
     if (silent) return
     let errMsg = ''
     let pass = true
     if (!rqs.length) pass = false
-    if (!isArgumentsObject(args)) args = [args]
     if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) return
     if (rqs.length !== args.length) pass = false
     rqs.forEach((rq, i) => {
@@ -77,12 +65,10 @@ function TYPEOF(args) {
       if (!warn) throw err
       else console.log(err)
     }
-    return passed
+    return args[0]
   }
 }
 
-TYPEOF.match = typesMatch
-TYPEOF.warn = function () {warn = true}
-TYPEOF.silence = function () {silent = true}
-
+TYPEOF.WARN = _=> warn = true
+TYPEOF.OFF = _=> silent = true
 module.exports = TYPEOF

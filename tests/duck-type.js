@@ -7,14 +7,14 @@ class MyClass {}
 //==============================================================================
 
 assert.doesNotThrow(
-  function() {TYPEOF({a:'s'})({ a:String })},
+  _=> TYPEOF({a:'s'})({ a:String }),
   'Should not throw when duck type matches.'
 )
 
 //==============================================================================
 
 assert.throws(
-  function() {TYPEOF({a:1})({ a:String })},
+  _=> TYPEOF({a:1})({ a:String }),
   'Should throw when duck type does not match.'
 )
 
@@ -22,7 +22,7 @@ assert.throws(
 
 function test(obj) {
   TYPEOF
-    (arguments)
+    (...arguments)
     (Number, { id:Number, name:String })
 }
 
@@ -50,7 +50,7 @@ assert.throws(
 
 function test1(obj) {
   TYPEOF
-    (arguments)
+    (...arguments)
     ({ myClass:'MyClass' })
 }
 

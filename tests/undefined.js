@@ -16,7 +16,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (String)
   }
 
@@ -33,7 +33,7 @@ void function () {
 
   function test() {
     TYPEOF
-      (arguments)
+      (...arguments)
       (undefined)
   }
 

@@ -6,14 +6,14 @@ const TYPEOF = require('../src')
 //==============================================================================
 
 assert.doesNotThrow(
-  function () {TYPEOF(NaN)(NaN)},
+  _=> TYPEOF(NaN)(NaN),
   'Should not throw when NaN is passed and required.'
 )
 
 //==============================================================================
 
 assert.throws(
-  function () {TYPEOF(5)(NaN)},
+  _=> TYPEOF(5)(NaN),
   'Should throw when 5 is passed and NaN is required.'
 )
 
@@ -23,7 +23,7 @@ void function () {
 
   function test(amount) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (Number)
   }
 
@@ -40,7 +40,7 @@ void function () {
 
   function test(amount) {
     TYPEOF
-      (arguments)
+      (...arguments)
       (NaN)
   }
 
