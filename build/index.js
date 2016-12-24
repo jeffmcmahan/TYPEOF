@@ -2,8 +2,9 @@
 
 var typesMatch = require('./types-match')
 var printValue = require('./print-value')
-var silent = false
+var off = false
 var warn = false
+var onFail = null
 
 /**
  * Alters a value to make it more suitable for printing to the console.
@@ -38,31 +39,30 @@ function cleanStack(stack) {
 }
 
 /**
- * Determines whether the given value is a native javascript Arguments object.
- * @param {*} args
- * @return {Boolean}
- */
-function isArgumentsObject(args) {
-  return Object.prototype.toString.call(args).indexOf('Arguments') > -1
-}
-
-/**
- * Top-level API.
- * @param {*} args
+ * Accepts the values to be checked and returns the check function.
+ * @NOTE Accepts indefinitely many arguments of any type.
  * @return {Function}
  */
-function TYPEOF(args) {
-  var passed = args
+function TYPEOF() {
+  var args = [], len = arguments.length;
+  while ( len-- ) args[ len ] = arguments[ len ];
 
+
+  /**
+   * The check function.
+   * @NOTE Accepts indefinitely many arguments of any type.
+   * @return {*} - the first value in args
+   */
   return function() {
     var rqs = [], len = arguments.length;
     while ( len-- ) rqs[ len ] = arguments[ len ];
 
-    if (silent) { return }
+    if (off) { return args[0] }
     var errMsg = ''
     var pass = true
+
+    // Check
     if (!rqs.length) { pass = false }
-    if (!isArgumentsObject(args)) { args = [args] }
     if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) { return }
     if (rqs.length !== args.length) { pass = false }
     rqs.forEach(function (rq, i) {
@@ -74,18 +74,22 @@ function TYPEOF(args) {
         errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
+
+    // Report failure.
     if (!pass) {
       var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      if (!warn) { throw err }
-      else { console.log(err) }
+      console.log(onFail)
+      if (onFail) { onFail(err) }
+      if (warn) { console.log(err) }
+      else { throw err }
     }
-    return passed
+
+    return args[0]
   }
 }
 
-TYPEOF.match = typesMatch
-TYPEOF.warn = function () {warn = true}
-TYPEOF.silence = function () {silent = true}
-
+TYPEOF.ONFAIL = function (callback) { return onFail = callback; }
+TYPEOF.WARN = function (_){ return warn = true; }
+TYPEOF.OFF = function (_){ return off = true; }
 module.exports = TYPEOF

@@ -58,21 +58,34 @@ assert(
 
 void function () {
 
+  let failCallbackFired = false
+  TYPEOF.ONFAIL(_=> failCallbackFired = true)
+
   function test() {
     TYPEOF
       (...arguments)
       (Number)
   }
 
-  assert.throws(
-    test,
-    'Non-silent.'
-  )
+  try {test()} catch(e) {}
+  assert(failCallbackFired, 'Should have fired the ONFAIL callback.')
 
+}()
+
+//==============================================================================
+
+void function () {
+
+  function test() {
+    TYPEOF
+      (...arguments)
+      (Number)
+  }
+
+  assert.throws(test, 'Non-silent.')
   TYPEOF.OFF()
-
   assert.doesNotThrow(
-    test.bind(null),
+    test,
     'Should not throw when in silent mode, even when there is type error.'
   )
 

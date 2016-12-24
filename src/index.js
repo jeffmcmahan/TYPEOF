@@ -2,8 +2,9 @@
 
 const typesMatch = require('./types-match')
 const printValue = require('./print-value')
-let silent = false
+let off = false
 let warn = false
+let onFail = null
 
 /**
  * Alters a value to make it more suitable for printing to the console.
@@ -38,15 +39,23 @@ function cleanStack(stack) {
 }
 
 /**
- * Top-level API.
- * @param {*} args
+ * Accepts the values to be checked and returns the check function.
+ * @NOTE Accepts indefinitely many arguments of any type.
  * @return {Function}
  */
 function TYPEOF(...args) {
+
+  /**
+   * The check function.
+   * @NOTE Accepts indefinitely many arguments of any type.
+   * @return {*} - the first value in args
+   */
   return function(...rqs) {
-    if (silent) return
+    if (off) return args[0]
     let errMsg = ''
     let pass = true
+
+    // Check
     if (!rqs.length) pass = false
     if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) return
     if (rqs.length !== args.length) pass = false
@@ -59,16 +68,21 @@ function TYPEOF(...args) {
         errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
+
+    // Report failure.
     if (!pass) {
       const err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      if (!warn) throw err
-      else console.log(err)
+      if (onFail) onFail(err)
+      if (warn) console.log(err)
+      else throw err
     }
+
     return args[0]
   }
 }
 
+TYPEOF.ONFAIL = callback => onFail = callback
 TYPEOF.WARN = _=> warn = true
-TYPEOF.OFF = _=> silent = true
+TYPEOF.OFF = _=> off = true
 module.exports = TYPEOF
