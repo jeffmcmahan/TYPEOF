@@ -173,7 +173,7 @@ It's powerfully wily---for javascript, this is just the job.
 ### Modes
 By default, `TYPEOF` throws an informative TypeError when validation fails. This can be changed per your needs.
 
-#### `TYPEOF.WARN(callback)`
+#### `TYPEOF.WARN()`
 Log type errors to the console instead of the `throw`-ing. This tends to be very useful during major refactoring.
 
 #### `TYPEOF.OFF()`
