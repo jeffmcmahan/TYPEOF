@@ -178,6 +178,3 @@ Log type errors to the console instead of the `throw`-ing. This tends to be very
 
 #### `TYPEOF.OFF()`
 Disables type checking to eliminate the performance hit and prevent `throw`-ing. This can be useful in production.
-
-#### Log errors remotely with `.SEND(<url>)`
-POSTs type error information (or warnings) to the given URL. This is especially useful when combined with `TYPEOF.WARN()` to monitor code in production.
