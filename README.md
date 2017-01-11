@@ -76,7 +76,7 @@ function isYoung(age) {
 }
 ```
 
-Iterables (*e.g.,* arrays, `arguments` objects) can be validated concisely using the spread operator, as follows:
+Array-like iterables (*i.e.,* arrays and native arguments objects) can be validated concisely using the spread operator, as follows:
 
 ```js
 function example(name, age, isTall) {
@@ -123,7 +123,7 @@ Use arrays to express that any of the given types is valid.
 TYPEOF(val)([String, Number])
 ```
 
-#### You can declare `'void'` and `'*'`.
+#### You can declare `'void'` and `'any'`.
 ```js
 function example() {
 
@@ -135,40 +135,52 @@ function example() {
 }
 ```
 
-Or permit any type with kleene star:
+Or permit any type:
 
 ```js
-TYPEOF(val)('*')
+TYPEOF(val)('any')
 ```
 
 #### Mix and nest as necessary.
 ```js
 TYPEOF
   (...arguments)
-  ([MyClass, String], { prop:MyClass, prop2:'*' }, 'MyClass')
+  ([MyClass, String], { prop:MyClass, prop2:'any' }, 'MyClass')
 ```
 
-### Complex validation is easy.
-You can extend `TYPEOF` with type and function signature descriptions for DRY-ness and concision. One could validate Express middleware as follows:
+### Defined types keep you DRY.
+Define complex types with `TYPEOF.DFN()` for DRY-ness and concision. Here we'll describe  the signature of a middleware function:
 
 ```js
-// Describe types and function signatures once:
-TYPEOF.req = { originalUrl:String, method:String }
-TYPEOF.res = { headersSent:Boolean, locals:Object }
-TYPEOF.middleware = [ TYPEOF.req, TYPEOF.res, Function ]
+const req = { originalUrl:String, method:String }
+const res = { headersSent:Boolean, locals:Object }
+TYPEOF.DFN('middleware', {1: req, 2: res, 3: Function})
+```
 
+And we can use it anywhere:
 
-// And then use them anywhere:
+```js
+// ./some-middleware.js
 function myMiddleware(req, res, next) {
 
   TYPEOF
     (...arguments)
-    (...TYPEOF.middleware)
+    ('middleware')
 
-  // ...
+  // Do whatever...
 }
 ```
-It's powerfully wily---for javascript, this is just the job.
+It's powerfully wily. You can define functions to check types when you need to do something weird, like check that a value *isn't* of a particular type, for example:
+
+```js
+// Does not permit an Object instance.
+function notObject (values) {
+  return values.every(val => !(val instanceof Object))
+}
+
+TYPEOF.DFN('not Object', notObject, true)
+```
+Passing true as the 3rd param option means the `notObject` function will be *invoked* to check the type (taking the values being checked as a single array argument).
 
 ### Modes
 By default, `TYPEOF` throws an informative TypeError when validation fails. This can be changed per your needs.

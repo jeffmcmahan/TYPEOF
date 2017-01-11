@@ -2,9 +2,6 @@
 
 var typesMatch = require('./types-match')
 var printValue = require('./print-value')
-var off = false
-var warn = false
-var onFail = null
 
 /**
  * Alters a value to make it more suitable for printing to the console.
@@ -48,8 +45,23 @@ function TYPEOF() {
     if (off) { return args[0] }
     var errMsg = ''
     var pass = true
+
+    // Must require something.
     if (!rqs.length) { pass = false }
-    if (rqs[0] === 'void' && rqs.length === 1 && args.length === 0) { return }
+
+    // Defined types.
+    if (rqs.length === 1 && typeof rqs[0] === 'string' && rqs[0] in dfns) {
+      rqs[0] = dfns[rqs[0]]
+      if (rqs[0].INVOKE && rqs[0](args)) { return true }
+      if (rqs[0] instanceof Object && '1' in rqs[0]) {
+        var i = 1
+        var dfn = []
+        while (i in rqs[0]) {dfn.push(rqs[0][i]); i++}
+        rqs = dfn
+      }
+    }
+
+    // Check values.
     if (rqs.length !== args.length) { pass = false }
     rqs.forEach(function (rq, i) {
       if (!typesMatch(rq, args[i])) {
@@ -60,7 +72,9 @@ function TYPEOF() {
         errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
-    if (!pass) { // Report failure.
+
+    // Report failure.
+    if (!pass) {
       var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
       if (onFail) { onFail(err) }
@@ -71,7 +85,29 @@ function TYPEOF() {
   }
 }
 
+// API functions
+var onFail = null
 TYPEOF.ONFAIL = function (callback) { return onFail = callback; }
+
+var warn = false
 TYPEOF.WARN = function (_){ return warn = true; }
+
+var off = false
 TYPEOF.OFF = function (_){ return off = true; }
+
+var dfns = {}
+TYPEOF.DFN = function (name, desc, invoke) {
+  if ( invoke === void 0 ) invoke = false;
+
+  if (invoke) { desc.INVOKE = true }
+  dfns[("" + name)] = desc
+}
+
+var Void = function (args) { return !args.length; }
+TYPEOF.DFN('void', Void, true)
+
+var any = function (args) { return args.length === 1; }
+TYPEOF.DFN('any', any, true)
+TYPEOF.DFN('*', any, true)
+
 module.exports = TYPEOF

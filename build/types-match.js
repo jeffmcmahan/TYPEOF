@@ -7,7 +7,6 @@
  * @return {Boolean}
  */
 module.exports = function typesMatch(type, value) {
-  if (type === '*') { return true }
   if (type === null) { return value === null }
   if (typeof type === 'undefined') { return typeof value === 'undefined' }
   if (typeof type === 'string') {

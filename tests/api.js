@@ -58,6 +58,30 @@ assert(
 
 void function () {
 
+  function test(req, res, next) {
+    TYPEOF
+      (...arguments)
+      ('middleware')
+  }
+
+  TYPEOF.DFN('middleware', {1: Object, 2: Object, 3: Function})
+  assert.doesNotThrow(
+    _=> test({}, {}, function(){}),
+    'Should not throw when types match the middleware dfn.'
+  )
+
+  assert.throws(
+    _=> test(),
+    'Should throw when types do not match the middleware dfn.'
+  )
+
+}()
+
+
+//==============================================================================
+
+void function () {
+
   let failCallbackFired = false
   TYPEOF.ONFAIL(_=> failCallbackFired = true)
 
