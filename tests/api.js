@@ -57,16 +57,18 @@ assert(
 //==============================================================================
 
 void function () {
+  TYPEOF.DFN('req', { url:String })
+  TYPEOF.DFN('res', { headersSent:Boolean })
 
   function test(req, res, next) {
+
     TYPEOF
       (...arguments)
-      ('middleware')
+      ('req', 'res', Function)
   }
 
-  TYPEOF.DFN('middleware', {1: Object, 2: Object, 3: Function})
   assert.doesNotThrow(
-    _=> test({}, {}, function(){}),
+    _=> test({url:''}, {headersSent:false}, _=>{}),
     'Should not throw when types match the middleware dfn.'
   )
 
@@ -76,9 +78,6 @@ void function () {
   )
 
 }()
-
-
-//==============================================================================
 
 void function () {
 

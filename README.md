@@ -152,9 +152,8 @@ TYPEOF
 Define complex types with `TYPEOF.DFN()` for DRY-ness and concision. Here we'll describe  the signature of a middleware function:
 
 ```js
-const req = { originalUrl:String, method:String }
-const res = { headersSent:Boolean, locals:Object }
-TYPEOF.DFN('middleware', {1: req, 2: res, 3: Function})
+TYPEOF.DFN('req', { originalUrl:String, method:String })
+TYPEOF.DFN('res', { headersSent:Boolean, locals:Object })
 ```
 
 And we can use it anywhere:
@@ -165,7 +164,7 @@ function myMiddleware(req, res, next) {
 
   TYPEOF
     (...arguments)
-    ('middleware')
+    ('req', 'res', Function)
 
   // Do whatever...
 }

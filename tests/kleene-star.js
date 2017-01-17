@@ -10,6 +10,11 @@ assert.doesNotThrow(
   'Should not throw when single arg is passed and kleene star is required.'
 )
 
+assert.doesNotThrow(
+  _=> TYPEOF({}, [])(Object, 'any'),
+  'Should not throw when "any" is required and an array is passed.'
+)
+
 //==============================================================================
 
 function test(amount) {

@@ -42,19 +42,11 @@ function TYPEOF(...args) {
 
     // Must require something.
     if (!rqs.length) pass = false
+    if (rqs[0] === 'void' && !args.length) return
 
     // Defined types.
-    if (rqs.length === 1 && typeof rqs[0] === 'string' && rqs[0] in dfns) {
-      rqs[0] = dfns[rqs[0]]
-      if (rqs[0].INVOKE && rqs[0](args)) return true
-      if (rqs[0] instanceof Object && '1' in rqs[0]) {
-        let i = 1
-        const dfn = []
-        while (i in rqs[0]) {dfn.push(rqs[0][i]); i++}
-        rqs = dfn
-      }
-    }
-
+    rqs = rqs.map(rq => typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq)
+    
     // Check values.
     if (rqs.length !== args.length) pass = false
     rqs.forEach((rq, i) => {
@@ -94,12 +86,5 @@ TYPEOF.DFN = (name, desc, invoke = false) => {
   if (invoke) desc.INVOKE = true
   dfns[`${name}`] = desc
 }
-
-const Void = args => !args.length
-TYPEOF.DFN('void', Void, true)
-
-const any = args => args.length === 1
-TYPEOF.DFN('any', any, true)
-TYPEOF.DFN('*', any, true)
 
 module.exports = TYPEOF

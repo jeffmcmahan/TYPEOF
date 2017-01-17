@@ -48,19 +48,11 @@ function TYPEOF() {
 
     // Must require something.
     if (!rqs.length) { pass = false }
+    if (rqs[0] === 'void' && !args.length) { return }
 
     // Defined types.
-    if (rqs.length === 1 && typeof rqs[0] === 'string' && rqs[0] in dfns) {
-      rqs[0] = dfns[rqs[0]]
-      if (rqs[0].INVOKE && rqs[0](args)) { return true }
-      if (rqs[0] instanceof Object && '1' in rqs[0]) {
-        var i = 1
-        var dfn = []
-        while (i in rqs[0]) {dfn.push(rqs[0][i]); i++}
-        rqs = dfn
-      }
-    }
-
+    rqs = rqs.map(function (rq) { return typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq; })
+    
     // Check values.
     if (rqs.length !== args.length) { pass = false }
     rqs.forEach(function (rq, i) {
@@ -102,12 +94,5 @@ TYPEOF.DFN = function (name, desc, invoke) {
   if (invoke) { desc.INVOKE = true }
   dfns[("" + name)] = desc
 }
-
-var Void = function (args) { return !args.length; }
-TYPEOF.DFN('void', Void, true)
-
-var any = function (args) { return args.length === 1; }
-TYPEOF.DFN('any', any, true)
-TYPEOF.DFN('*', any, true)
 
 module.exports = TYPEOF

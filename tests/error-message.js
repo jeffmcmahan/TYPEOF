@@ -232,7 +232,7 @@ void function () {
     function (err) {
       return err.toString().indexOf(
    `Value (1):
-     Required: Void
+     Required: void
      Provided: 'yo'`) !== -1
     },
     'Should report void mistmatch.'
