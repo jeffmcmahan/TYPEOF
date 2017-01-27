@@ -179,11 +179,11 @@ TYPEOF({})('not Object') // throws
 
 Passing `true` as the third parameter tells TYPEOF that the `notObject` function should be *invoked* to check the type, taking the value being checked as the sole argument.
 
-### `TYPEOF.WARN()`
-TYPEOF will report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
+### Warn mode.
+Use to `TYPEOF.WARN()` to have TYPEOF report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
 
-### `TYPEOF.OFF()`
-Disables all type checking, eliminate the (negligible) performance hit and prevents `throw`-ing. (This is useful in production.)
+### Off.
+`TYPEOF.OFF()` Disables all type checking, eliminate the (negligible) performance hit and prevents `throw`-ing. (This is useful in production.)
 
-### `TYPEOF.ONFAIL(callback)`
-Pass a function to `TYPEOF.ONFAIL()` to implement remote logging (or whatever). When an error is encountered, it will be passed to your function.
+### React to TypeErrors
+Call `TYPEOF.ONFAIL(callback)` and pass a callback to implement remote logging (or whatever). When an error is encountered, it will be passed to your function.
