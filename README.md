@@ -172,17 +172,15 @@ function myMiddleware(req, res, next) {
 It's powerfully wily. You can define functions to check types when you need to do something weird, like check that a value *isn't* of a particular type, for example:
 
 ```js
-// Does not permit an Object instance.
-function notObject (val) {
-  return !(val instanceof Object)
-}
+TYPEOF.DFN('not Object', val => !(val instanceof Object), true)
 
-TYPEOF.DFN('not Object', notObject, true)
+TYPEOF({})('not Object') // throws
 ```
-Passing true as the 3rd param option means the `notObject` function will be *invoked* to check the type (taking the values being checked as a single array argument).
+
+Passing `true` as the third parameter tells TYPEOF that the `notObject` function should be *invoked* to check the type, taking the value being checked as the sole argument.
 
 ### `TYPEOF.WARN()`
-TYPEOF will Report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
+TYPEOF will report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
 
 ### `TYPEOF.OFF()`
 Disables all type checking, eliminate the (negligible) performance hit and prevents `throw`-ing. (This is useful in production.)
