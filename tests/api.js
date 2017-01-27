@@ -79,6 +79,32 @@ void function () {
 
 }()
 
+//==============================================================================
+
+void function () {
+  TYPEOF.DFN('bool', (val => typeof val === 'boolean'), true)
+
+  function test() {
+
+    TYPEOF
+      (...arguments)
+      ('bool')
+  }
+
+  assert.doesNotThrow(
+    _=> test(false),
+    'Should not throw when types match the invocable type dfn.'
+  )
+
+  assert.throws(
+    _=> test(0),
+    'Should throw when value doesn\'t satisfy the invocable type dfn.'
+  )
+
+}()
+
+//==============================================================================
+
 void function () {
 
   let failCallbackFired = false

@@ -52,7 +52,7 @@ function TYPEOF() {
 
     // Defined types.
     rqs = rqs.map(function (rq) { return typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq; })
-    
+
     // Check values.
     if (rqs.length !== args.length) { pass = false }
     rqs.forEach(function (rq, i) {
@@ -88,11 +88,16 @@ var off = false
 TYPEOF.OFF = function (_){ return off = true; }
 
 var dfns = {}
+
 TYPEOF.DFN = function (name, desc, invoke) {
   if ( invoke === void 0 ) invoke = false;
 
   if (invoke) { desc.INVOKE = true }
   dfns[("" + name)] = desc
 }
+
+// Define 'any' and '*'
+TYPEOF.DFN('any', function (_){ return true; }, true)
+TYPEOF.DFN('*', function (_){ return true; }, true)
 
 module.exports = TYPEOF

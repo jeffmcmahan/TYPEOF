@@ -46,7 +46,7 @@ function TYPEOF(...args) {
 
     // Defined types.
     rqs = rqs.map(rq => typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq)
-    
+
     // Check values.
     if (rqs.length !== args.length) pass = false
     rqs.forEach((rq, i) => {
@@ -82,9 +82,14 @@ let off = false
 TYPEOF.OFF = _=> off = true
 
 const dfns = {}
+
 TYPEOF.DFN = (name, desc, invoke = false) => {
   if (invoke) desc.INVOKE = true
   dfns[`${name}`] = desc
 }
+
+// Define 'any' and '*'
+TYPEOF.DFN('any', _=> true, true)
+TYPEOF.DFN('*', _=> true, true)
 
 module.exports = TYPEOF
