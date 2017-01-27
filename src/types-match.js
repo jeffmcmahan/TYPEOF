@@ -14,9 +14,9 @@ module.exports = function typesMatch(type, value) {
     return typeof value === 'object' && value.constructor.name === type
   }
   if (type instanceof Array) return type.some(type => typesMatch(type, value))
-  if (type instanceof Object && Object.keys(type).length > 0) {
+  if (typeof type === 'object' && Object.keys(type).length > 0) {
     return (
-      value instanceof Object &&
+      typeof type === 'object' &&
       Object.keys(type).every(key => typesMatch(type[key], value[key]))
     )
   }
