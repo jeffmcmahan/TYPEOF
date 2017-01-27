@@ -183,7 +183,7 @@ Passing `true` as the third parameter tells TYPEOF that the `notObject` function
 Use to `TYPEOF.WARN()` to have TYPEOF report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
 
 ### Off.
-`TYPEOF.OFF()` Disables all type checking, eliminate the (negligible) performance hit and prevents `throw`-ing. (This is useful in production.)
+`TYPEOF.OFF()` Disables all type checking, eliminates the (negligible) performance hit of the type checks, and prevents `throw`-ing. (This is useful in production.)
 
 ### React to TypeErrors
 Call `TYPEOF.ONFAIL(callback)` and pass a callback to implement remote logging (or whatever). When an error is encountered, it will be passed to your function.
