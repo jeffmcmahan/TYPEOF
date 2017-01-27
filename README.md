@@ -173,8 +173,8 @@ It's powerfully wily. You can define functions to check types when you need to d
 
 ```js
 // Does not permit an Object instance.
-function notObject (values) {
-  return values.every(val => !(val instanceof Object))
+function notObject (val) {
+  return !(val instanceof Object)
 }
 
 TYPEOF.DFN('not Object', notObject, true)
