@@ -181,14 +181,11 @@ TYPEOF.DFN('not Object', notObject, true)
 ```
 Passing true as the 3rd param option means the `notObject` function will be *invoked* to check the type (taking the values being checked as a single array argument).
 
-### Modes
-By default, `TYPEOF` throws an informative TypeError when validation fails. This can be changed per your needs.
+### `TYPEOF.WARN()`
+TYPEOF will Report TypeErrors in the console but will not throw. (This is useful during when refactoring.)
 
-#### `TYPEOF.WARN()`
-Log type errors to the console instead of the `throw`-ing. This tends to be very useful during major refactoring.
+### `TYPEOF.OFF()`
+Disables all type checking, eliminate the (negligible) performance hit and prevents `throw`-ing. (This is useful in production.)
 
-#### `TYPEOF.OFF()`
-Disables type checking to eliminate the performance hit and prevent `throw`-ing. This can be useful in production.
-
-#### `TYPEOF.ONFAIL(callback)`
-Pass a function to `ONFAIL` to implement remote logging or whatever. Your callback will be passed the TypeError.
+### `TYPEOF.ONFAIL(callback)`
+Pass a function to `TYPEOF.ONFAIL()` to implement remote logging (or whatever). When an error is encountered, it will be passed to your function.
