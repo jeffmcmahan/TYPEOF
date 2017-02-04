@@ -199,6 +199,28 @@ void function () {
 
 void function () {
 
+  function test(numeric) {
+    TYPEOF
+      (...arguments)
+      (['MyClass', 'MyOtherClass'])
+  }
+
+  assert.throws(
+    test.bind(null, false),
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: MyClass|MyOtherClass
+     Provided: false`) !== -1
+    },
+    'Should be readable disjoint type diff.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
   function test(undef) {
     TYPEOF
       (...arguments)
@@ -306,6 +328,30 @@ void function () {
      Provided: undefined`) !== -1
     },
     'Should report null mismatch.'
+  )
+}()
+
+//==============================================================================
+
+void function () {
+
+  class MyClass {}
+
+  function test() {
+    TYPEOF
+      (...arguments)
+      ('MyClass')
+  }
+
+  assert.throws(
+    test,
+    function (err) {
+      return err.toString().indexOf(
+   `Value (1):
+     Required: MyClass
+     Provided: void`) !== -1
+    },
+    'Should report void/MyClass mismatch.'
   )
 }()
 

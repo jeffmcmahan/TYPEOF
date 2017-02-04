@@ -74,6 +74,7 @@ exports.rq = function (rq) {
   if (rq === null) return 'null'
   if (Array.isArray(rq)) return printDisjoint(rq)
   if (typeof rq === 'object' && rq instanceof Object) return printDuckType(rq)
+  if (typeof rq === 'string') return rq
 }
 
 exports.arg = function (arg) {
