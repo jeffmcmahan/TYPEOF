@@ -60,7 +60,7 @@ function TYPEOF() {
         pass = false
         var isVoid = args.length < i + 1
         errMsg += '\n    Value (' + (i + 1) + '):\n'
-        errMsg += '     Required: ' + printValue.rq(rq, true) + '\n'
+        errMsg += '     Required: ' + printValue.rq(rq) + '\n'
         errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
     })
