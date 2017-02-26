@@ -47,17 +47,21 @@ function TYPEOF(...args) {
     // Defined types.
     rqs = rqs.map(rq => typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq)
 
-    // Check values.
+    // Check arity.
     if (rqs.length !== args.length) pass = false
-    rqs.forEach((rq, i) => {
-      if (!typesMatch(rq, args[i])) {
+
+    // Check values.
+    const len = rqs.length >= args.length ? rqs.length : args.length
+    for (let i = 0; i < len; i++) {
+      if (!typesMatch(rqs[i], args[i])) {
         pass = false
-        const isVoid = args.length < i + 1
+        const rqIsVoid = rqs.length < i + 1
+        const argIsVoid = args.length < i + 1
         errMsg += '\n    Value (' + (i + 1) + '):\n'
-        errMsg += '     Required: ' + printValue.rq(rq) + '\n'
-        errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
+        errMsg += '     Required: ' + (rqIsVoid ? 'void (implicit)' : printValue.rq(rqs[i])) + '\n'
+        errMsg += '     Provided: ' + (argIsVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
-    })
+    }
 
     // Report failure.
     if (!pass) {

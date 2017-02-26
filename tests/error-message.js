@@ -16,10 +16,10 @@ void function () {
   assert.throws(
     test.bind(null, 'str'),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: boolean
-     Provided: 'str'`) !== -1
+     Provided: 'str'`)
     },
     'Should report boolean type mismatch.'
   )
@@ -38,10 +38,10 @@ void function () {
   assert.throws(
     test.bind(null, 'str'),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: number
-     Provided: 'str'`) !== -1
+     Provided: 'str'`)
     },
     'Should report number type mismatch.'
   )
@@ -60,10 +60,10 @@ void function () {
   assert.throws(
     test.bind(null, 1),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: string
-     Provided: 1`) !== -1
+     Provided: 1`)
     },
     'Should report string type mismatch.'
   )
@@ -82,10 +82,10 @@ void function () {
   assert.throws(
     test.bind(null, {}),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: array
-     Provided: {}`) !== -1
+     Provided: {}`)
     },
     'Should report array type mismatch.'
   )
@@ -104,10 +104,10 @@ void function () {
   assert.throws(
     test.bind(null, []),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: Object
-     Provided: []`) !== -1
+     Provided: []`)
     },
     'Should report object type mismatch.'
   )
@@ -126,7 +126,7 @@ void function () {
   assert.throws(
     test.bind(null, false, '55', 'true', {}, []),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: string
      Provided: false
@@ -145,7 +145,7 @@ void function () {
 
     Value (5):
      Required: Object
-     Provided: []`) !== -1
+     Provided: []`)
     },
     'Should throw 5 value diffs for 5 failures.'
   )
@@ -164,10 +164,10 @@ void function () {
   assert.throws(
     test.bind(null, {name:'Joe', age:'55'}),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: { name:string, age:number ... }
-     Provided: { name:string, age:string ... }`) !== -1
+     Provided: { name:string, age:string ... }`)
     },
     'Should be readable duck-type diff.'
   )
@@ -186,10 +186,10 @@ void function () {
   assert.throws(
     test.bind(null, false),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: string|number
-     Provided: false`) !== -1
+     Provided: false`)
     },
     'Should be readable disjoint type diff.'
   )
@@ -208,10 +208,10 @@ void function () {
   assert.throws(
     test.bind(null, false),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: MyClass|MyOtherClass
-     Provided: false`) !== -1
+     Provided: false`)
     },
     'Should be readable disjoint type diff.'
   )
@@ -230,10 +230,10 @@ void function () {
   assert.throws(
     test.bind(null, null),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: undefined
-     Provided: null`) !== -1
+     Provided: null`)
     },
     'Should report undefined mistmatch.'
   )
@@ -252,10 +252,10 @@ void function () {
   assert.throws(
     test.bind(null, 'yo'),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: void
-     Provided: 'yo'`) !== -1
+     Provided: 'yo'`)
     },
     'Should report void mistmatch.'
   )
@@ -274,10 +274,10 @@ void function () {
   assert.throws(
     test.bind(null),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: string
-     Provided: void`) !== -1
+     Provided: void`)
     },
     'Should report void mistmatch.'
   )
@@ -296,14 +296,14 @@ void function () {
   assert.throws(
     test.bind(null),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: string
      Provided: void
 
     Value (2):
      Required: number
-     Provided: void`) !== -1
+     Provided: void`)
     },
     'Should report multiple void arguments mistmatch.'
   )
@@ -322,10 +322,10 @@ void function () {
   assert.throws(
     test.bind(null, undefined),
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: null
-     Provided: undefined`) !== -1
+     Provided: undefined`)
     },
     'Should report null mismatch.'
   )
@@ -346,13 +346,38 @@ void function () {
   assert.throws(
     test,
     function (err) {
-      return err.toString().indexOf(
+      return err.toString().includes(
    `Value (1):
      Required: MyClass
-     Provided: void`) !== -1
+     Provided: void`)
     },
     'Should report void/MyClass mismatch.'
   )
+}()
+
+//==============================================================================
+
+void function () {
+
+  class MyClass {}
+
+  function test() {
+    TYPEOF
+      (...arguments)
+      (Number)
+  }
+
+  assert.throws(
+    _=> test(1, 2),
+    function (err) {
+      return err.toString().includes(
+   `Value (2):
+     Required: void (implicit)
+     Provided: 2`)
+    },
+    'Should report implicit void mismatch.'
+  )
+
 }()
 
 //==============================================================================

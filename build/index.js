@@ -39,8 +39,8 @@ function TYPEOF() {
   while ( len-- ) args[ len ] = arguments[ len ];
 
   return function() {
-    var rqs = [], len = arguments.length;
-    while ( len-- ) rqs[ len ] = arguments[ len ];
+    var rqs = [], len$1 = arguments.length;
+    while ( len$1-- ) rqs[ len$1 ] = arguments[ len$1 ];
 
     if (off) { return args[0] }
     var errMsg = ''
@@ -53,17 +53,21 @@ function TYPEOF() {
     // Defined types.
     rqs = rqs.map(function (rq) { return typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq; })
 
-    // Check values.
+    // Check arity.
     if (rqs.length !== args.length) { pass = false }
-    rqs.forEach(function (rq, i) {
-      if (!typesMatch(rq, args[i])) {
+
+    // Check values.
+    var len = rqs.length >= args.length ? rqs.length : args.length
+    for (var i = 0; i < len; i++) {
+      if (!typesMatch(rqs[i], args[i])) {
         pass = false
-        var isVoid = args.length < i + 1
+        var rqIsVoid = rqs.length < i + 1
+        var argIsVoid = args.length < i + 1
         errMsg += '\n    Value (' + (i + 1) + '):\n'
-        errMsg += '     Required: ' + printValue.rq(rq) + '\n'
-        errMsg += '     Provided: ' + (isVoid ? 'void': printValue.arg(args[i])) + '\n'
+        errMsg += '     Required: ' + (rqIsVoid ? 'void (implicit)' : printValue.rq(rqs[i])) + '\n'
+        errMsg += '     Provided: ' + (argIsVoid ? 'void': printValue.arg(args[i])) + '\n'
       }
-    })
+    }
 
     // Report failure.
     if (!pass) {
