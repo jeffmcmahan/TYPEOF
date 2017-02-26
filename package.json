@@ -1,6 +1,6 @@
 {
   "name": "type.of",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Effective type checking in plain javascript.",
   "main": "build/index.js",
   "scripts": {
