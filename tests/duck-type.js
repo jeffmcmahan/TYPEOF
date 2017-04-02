@@ -59,4 +59,20 @@ assert.doesNotThrow(
   'Should work with embedded custom constructors.'
 )
 
+//==============================================================================
+
+function test2(obj) {
+  TYPEOF
+     (...arguments)
+     ({ propName:'any' })
+}
+
+assert.throws(
+  test2.bind(null, undefined),
+  function (err) {
+    return !err.toString().includes('Cannot read property')
+  },
+  'Should throw a TYPEOF TypeError error (not a property lookup error).'
+)
+
 process.stdout.write('  ✔ Duck-type requirement tests passed.\n')

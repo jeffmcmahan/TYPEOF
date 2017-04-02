@@ -18,7 +18,7 @@ function printType(value, isRQ = false) {
 }
 
 function printObject(value) {
-  const keys = Object.keys(value).slice(0,5).filter(key => value[key] !== value)
+  const keys = Object.keys(value).filter(key => value[key] !== value)
   const obj= {}
   keys.forEach(key => obj[key] = printType(value[key]))
   if (!keys.length) return '{}'
@@ -35,11 +35,11 @@ function printObject(value) {
 function printArray(value) {
   if (!value.length) return '[]'
   return (
+    '[ ' +
     value.slice(0,3)
       .map(printType)
-      .join()
-      .replace('[', '[ ')
-      .replace(']', ', ... ]')
+      .join(', ') +
+    ' ]'
   )
 }
 

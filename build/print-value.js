@@ -20,7 +20,7 @@ function printType(value, isRQ) {
 }
 
 function printObject(value) {
-  var keys = Object.keys(value).slice(0,5).filter(function (key) { return value[key] !== value; })
+  var keys = Object.keys(value).filter(function (key) { return value[key] !== value; })
   var obj= {}
   keys.forEach(function (key) { return obj[key] = printType(value[key]); })
   if (!keys.length) { return '{}' }
@@ -37,11 +37,11 @@ function printObject(value) {
 function printArray(value) {
   if (!value.length) { return '[]' }
   return (
+    '[ ' +
     value.slice(0,3)
       .map(printType)
-      .join()
-      .replace('[', '[ ')
-      .replace(']', ', ... ]')
+      .join(', ') +
+    ' ]'
   )
 }
 

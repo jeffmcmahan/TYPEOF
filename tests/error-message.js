@@ -193,6 +193,20 @@ void function () {
     },
     'Should be readable disjoint type diff.'
   )
+
+  function test2(arg) {
+    TYPEOF
+      (...arguments)
+      (Object)
+  }
+
+  assert.throws(
+    test2.bind(null, [1, 2, 4]),
+    function (err) {
+      return err.toString().includes('[ number, number, number ]')
+    },
+    'Should serialize the array.'
+  )
 }()
 
 //==============================================================================
