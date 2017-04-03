@@ -3,6 +3,8 @@
 var typesMatch = require('./types-match')
 var printValue = require('./print-value')
 
+//=========================================== Error Stack Transforms ===========
+
 /**
  * Alters a value to make it more suitable for printing to the console.
  * @param {*} rq
@@ -34,6 +36,22 @@ function cleanStack(stack) {
   }).join('\n')
 }
 
+function message(rq, arg, argNum) {
+  return ('\n' +
+    "    Value (" + argNum + "):\n" +
+    "     Required: " + (printValue.rq(rq)) + "\n" +
+    "     Provided: " + (printValue.arg(arg)) + "\n"
+  )
+}
+
+//============================================================ API =============
+
+/**
+ * Accept any argument(s) and return a function which accepts the requirement(s)
+ * that will be used to check the argument(s).
+ * @param {...*}
+ * @return {Function} check function
+ */
 function TYPEOF() {
   var args = [], len = arguments.length;
   while ( len-- ) args[ len ] = arguments[ len ];
@@ -42,66 +60,76 @@ function TYPEOF() {
     var rqs = [], len$1 = arguments.length;
     while ( len$1-- ) rqs[ len$1 ] = arguments[ len$1 ];
 
-    if (off) { return args[0] }
-    var errMsg = ''
+    if (state.off) { return args[0] }
+    var msg = ''
     var pass = true
 
     // Must require something.
     if (!rqs.length) { pass = false }
-    if (rqs[0] === 'void' && !args.length) { return }
 
-    // Defined types.
-    rqs = rqs.map(function (rq) { return typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq; })
+    // If void and no arguments provided, pass.
+    if (rqs[0] === 'void' && !args.length) { return }
 
     // Check arity.
     if (rqs.length !== args.length) { pass = false }
 
+    // Defined types.
+    rqs = rqs.map(function (rq) { return (
+      typeof rq === 'string' && rq in state.definedTypes
+        ? state.definedTypes[rq]
+        : rq
+    ); })
+
     // Check values.
     var len = rqs.length >= args.length ? rqs.length : args.length
     for (var i = 0; i < len; i++) {
-      if (!typesMatch(rqs[i], args[i])) {
+      var rq = rqs.length < (i + 1) ? '__VOID' : rqs[i]
+      var arg = args.length < (i + 1) ? '__VOID' : args[i]
+      if (!typesMatch(rq, arg)) {
         pass = false
-        var rqIsVoid = rqs.length < i + 1
-        var argIsVoid = args.length < i + 1
-        errMsg += '\n    Value (' + (i + 1) + '):\n'
-        errMsg += '     Required: ' + (rqIsVoid ? 'void (implicit)' : printValue.rq(rqs[i])) + '\n'
-        errMsg += '     Provided: ' + (argIsVoid ? 'void': printValue.arg(args[i])) + '\n'
+        msg += message(rq, arg, i + 1)
       }
     }
 
-    // Report failure.
+    // Throw and/or report a TypeError.
     if (!pass) {
-      var err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
+      var err = new TypeError('TYPEOF\n ' + msg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      if (onFail) { onFail(err) }
-      if (warn) { console.log(err) }
+      if (state.onFail) { state.onFail(err) }
+      if (state.warn) { console.log(err) }
       else { throw err }
     }
     return args[0]
   }
 }
 
-// API functions
-var onFail = null
-TYPEOF.ONFAIL = function (callback) { return onFail = callback; }
+//====================================================== API Methods ===========
 
-var warn = false
-TYPEOF.WARN = function (_){ return warn = true; }
+var state = {
+  onFail: null,
+  warn: false,
+  off: false,
+  definedTypes: {}
+}
 
-var off = false
-TYPEOF.OFF = function (_){ return off = true; }
-
-var dfns = {}
-
+TYPEOF.ONFAIL = function (callback) { return state.onFail = callback; }
+TYPEOF.WARN = function (){ return state.warn = true; }
+TYPEOF.OFF = function (){ return state.off = true; }
 TYPEOF.DFN = function (name, desc, invoke) {
   if ( invoke === void 0 ) invoke = false;
 
-  if (invoke) { desc.INVOKE = true }
-  dfns[("" + name)] = desc
+  if (invoke) {
+    desc.__INVOKE = true
+    desc.__NAME = name
+  }
+  state.definedTypes[name] = desc
 }
 
-// Define 'any' and '*'
-TYPEOF.DFN('any', function (_){ return true; }, true)
-TYPEOF.DFN('*', function (_){ return true; }, true)
+//================================================ Define 'any' and '*' ========
+
+TYPEOF.DFN('any', function() {return arguments.length > 0}, true)
+TYPEOF.DFN('*', function() {return arguments.length > 0}, true)
+
+//==============================================================================
 
 module.exports = TYPEOF
