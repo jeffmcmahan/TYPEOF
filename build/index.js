@@ -36,10 +36,37 @@ function cleanStack(stack) {
   }).join('\n')
 }
 
+function diff(rq, arg) {
+  var subsetArg = {}
+  Object.keys(rq).forEach(function (key) {if (key in arg) { subsetArg[key] = arg[key] }})
+  var rqType = printValue.rq(rq)
+  var argType = printValue.arg(subsetArg)
+  var rqProps = rqType.replace(/[{}]/g, '').trim().split(', ')
+  var argProps = argType.replace(/[{}]/g, '').trim().split(', ')
+  var diffedRq = rqProps.filter(function (req) { return !argProps.includes(req); })
+  var diffedArg = argProps.filter(function (rg) { return !rqProps.includes(rg); })
+  return {
+    rq: ("{ " + (diffedRq.join(', ')) + ", ... }"),
+    arg: ("{ " + (diffedArg.join(', ')) + ", ... }")
+  }
+}
+
 function message(rq, arg, argNum) {
+  var isDuck = (
+    rq instanceof Object &&
+    rq.constructor === Object &&
+    Object.keys(rq).length
+  )
+  var rqType = printValue.rq(rq)
+  var argType = printValue.arg(arg)
+  if (isDuck) {
+    var diffed = diff(rq, arg)
+    rqType = diffed.rq
+    argType = diffed.arg
+  }
   return ('\n' +
-    "    (" + argNum + ") required: " + (printValue.rq(rq)) + "\n" +
-    "        provided: " + (printValue.arg(arg)) + "\n"
+    "    (" + argNum + ") required: " + rqType + "\n" +
+            "        provided: " + argType + "\n"
   )
 }
 

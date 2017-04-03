@@ -31,7 +31,7 @@ function printType(value, isRQ = false) {
  * @return {String}
  */
 function printObject(value) {
-  const keys = Object.keys(value).filter(key => value[key] !== value)
+  const keys = Object.keys(value).sort().filter(key => value[key] !== value)
   const obj= {}
   keys.forEach(key => obj[key] = printType(value[key]))
   if (!keys.length) return '{}'
@@ -57,7 +57,7 @@ function printArray(arr) {
  * @return {String}
  */
 function printDuckType(duckType) {
-  const keys = Object.keys(duckType)
+  const keys = Object.keys(duckType).sort()
   const obj = {}
   keys.forEach(key => obj[key] = exports.rq(duckType[key]))
   if (!keys.length) return '{}'
@@ -102,12 +102,9 @@ exports.rq = function (rq) {
  */
 exports.arg = function (arg) {
   if (arg === '__VOID') return 'void'
-  if (typeof arg === 'undefined') return 'undefined'
-  if (arg === null) return 'null'
-  if (typeof arg === 'object') {
+  if (arg && typeof arg === 'object') {
     if (arg instanceof Array) return printArray(arg)
     return printObject(arg)
   }
-  if (typeof arg === 'string') return `'${arg}'`
-  return arg.toString()
+  return printType(arg)
 }

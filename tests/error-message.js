@@ -18,7 +18,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: boolean
-        provided: 'str'`)
+        provided: string`)
     },
     'Should report boolean type mismatch.'
   )
@@ -39,7 +39,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: number
-        provided: 'str'`)
+        provided: string`)
     },
     'Should report number type mismatch.'
   )
@@ -60,7 +60,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: string
-        provided: 1`)
+        provided: number`)
     },
     'Should report string type mismatch.'
   )
@@ -123,13 +123,13 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: string
-        provided: false
+        provided: boolean
 
     (2) required: number
-        provided: '55'
+        provided: string
 
     (3) required: boolean
-        provided: 'true'
+        provided: string
 
     (4) required: array
         provided: {}
@@ -152,13 +152,32 @@ void function () {
   }
 
   assert.throws(
-    test.bind(null, {name:'Joe', age:'55'}),
+    test.bind(null, {name: false, age: '55', otherProp:[]}),
     function (err) {
       return err.toString().includes(
-   `(1) required: { name:string, age:number }
-        provided: { name:string, age:string }`)
+   `(1) required: { age:number, name:string, ... }
+        provided: { age:string, name:boolean, ... }`)
     },
-    'Should be readable diff of duck-type and Object.'
+    'Should produce a readable diff of duck-type and Object.'
+  )
+}()
+
+void function () {
+
+  function test({name, age}) {
+    TYPEOF
+      (...arguments)
+      ({ name:String, age:Number })
+  }
+
+  assert.throws(
+    test.bind(null, {name: false, otherProp:[]}),
+    function (err) {
+      return err.toString().includes(
+   `(1) required: { age:number, name:string, ... }
+        provided: { name:boolean, ... }`)
+    },
+    'Should produce a readable diff of duck-type and Object.'
   )
 }()
 
@@ -177,7 +196,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: string|number
-        provided: false`)
+        provided: boolean`)
     },
     'Should be readable diff of disjoint type and boolean.'
   )
@@ -210,7 +229,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: MyClass|MyOtherClass
-        provided: false`)
+        provided: boolean`)
     },
     'Should be readable disjoint type diff.'
   )
@@ -273,7 +292,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: void
-        provided: 1`)
+        provided: number`)
     },
     'Should report explicit void requirement.'
   )
@@ -294,7 +313,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(1) required: void
-        provided: 'yo'`)
+        provided: string`)
     },
     'Should report void mistmatch.'
   )
@@ -379,7 +398,7 @@ void function () {
     function (err) {
       return err.toString().includes(
    `(2) required: void (implicit)
-        provided: 2`)
+        provided: number`)
     },
     'Should report implicit void mismatch.'
   )

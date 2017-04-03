@@ -36,10 +36,37 @@ function cleanStack(stack) {
   }).join('\n')
 }
 
+function diff(rq, arg) {
+  const subsetArg = {}
+  Object.keys(rq).forEach(key => {if (key in arg) subsetArg[key] = arg[key]})
+  let rqType = printValue.rq(rq)
+  let argType = printValue.arg(subsetArg)
+  const rqProps = rqType.replace(/[{}]/g, '').trim().split(', ')
+  const argProps = argType.replace(/[{}]/g, '').trim().split(', ')
+  const diffedRq = rqProps.filter(req => !argProps.includes(req))
+  const diffedArg = argProps.filter(rg => !rqProps.includes(rg))
+  return {
+    rq: `{ ${diffedRq.join(', ')}, ... }`,
+    arg: `{ ${diffedArg.join(', ')}, ... }`
+  }
+}
+
 function message(rq, arg, argNum) {
+  const isDuck = (
+    rq instanceof Object &&
+    rq.constructor === Object &&
+    Object.keys(rq).length
+  )
+  let rqType = printValue.rq(rq)
+  let argType = printValue.arg(arg)
+  if (isDuck) {
+    const diffed = diff(rq, arg)
+    rqType = diffed.rq
+    argType = diffed.arg
+  }
   return ('\n' +
-    `    (${argNum}) required: ${printValue.rq(rq)}\n` +
-    `        provided: ${printValue.arg(arg)}\n`
+    `    (${argNum}) required: ${rqType}\n` +
+            `        provided: ${argType}\n`
   )
 }
 

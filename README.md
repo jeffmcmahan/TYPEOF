@@ -4,6 +4,7 @@ npm install type.of
 ```
 
 Expressive syntax:
+
 ```js
 function person(name, weight, children) {
 
@@ -16,11 +17,12 @@ function person(name, weight, children) {
 ```
 
 Nice messages:
+
 ```
 TypeError:
 
     (2) required: number
-        Provided: '164lbs.'
+        Provided: string
 
     (3) required: array
         Provided: { name:string, weight:number, children:array }
@@ -71,7 +73,7 @@ We fix the gotchas, and when mismatches happen, there's no detective work:
 TypeError:
 
     (2) required: number
-        provided: '164lbs.'
+        provided: string
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
@@ -84,6 +86,7 @@ TypeError:
 
 ## API
 ### Validate types.
+
 `TYPEOF` implements pairwise type validation with Curry syntax:
 
 ```js
@@ -128,6 +131,7 @@ divide(10, undefined) // throws
 
 ### Type descriptions
 #### Native and custom types work.
+
 ```js
 TYPEOF(val)(ArrayBuffer)
 TYPEOF(val)(MyClass)
@@ -135,20 +139,48 @@ TYPEOF(val)('MyClass') // <-- By name works too.
 ```
 
 #### Duck types work.
+
 Specify any subset of keys and corresponding types to duck type a value.
 
 ```js
-TYPEOF(val)({ name:String, weight:Number })
+
+  TYPEOF
+    (val)
+    ({ name:String, weight:Number })
+
+```
+
+TypeErrors produce description diffs of the form:
+
+```
+TypeError:
+
+    (1) required: { age:number, name:string, ... }
+        provided: { age:string, name:number, ... }
+
+    ...
 ```
 
 #### Disjoint types work.
+
 Use arrays to express that any of the given types is valid.
 
 ```js
 TYPEOF(val)([String, Number])
 ```
 
+TypeErrors produce description diffs of the form:
+```
+TypeError:
+
+    (1) required: number|string
+        provided: null
+
+    ...
+```
+
 #### You can declare `'void'` and `'any'`.
+
 ```js
 function example() {
 
@@ -167,6 +199,7 @@ TYPEOF(val)('any')
 ```
 
 #### Mix and nest as necessary.
+
 ```js
 TYPEOF
   (...arguments)
@@ -174,6 +207,7 @@ TYPEOF
 ```
 
 ### Defined types keep you DRY.
+
 Define complex types with `TYPEOF.DFN()` for DRY-ness and concision. Here we'll describe  the signature of a middleware function:
 
 ```js
@@ -194,6 +228,7 @@ function myMiddleware(req, res, next) {
   // Do whatever...
 }
 ```
+
 It's powerfully wily. You can define functions to check types when you need to do something weird, like check that a value *isn't* of a particular type, for example:
 
 ```js
@@ -205,10 +240,13 @@ TYPEOF({})('not Object') // throws
 Passing `true` as the third parameter tells TYPEOF that the `notObject` function should be *invoked* to check the type, taking the value being checked as the sole argument.
 
 ### Warn mode.
+
 Use `TYPEOF.WARN()` to have TYPEOF merely report TypeErrors in the console. (This is useful when refactoring.)
 
 ### Off.
+
 `TYPEOF.OFF()` Disables all type checking, eliminates the (negligible) performance hit of the type checks, and prevents `throw`-ing. (This is useful in production.)
 
 ### React to TypeErrors
+
 Call `TYPEOF.ONFAIL(callback)` and pass a callback to implement remote logging (or whatever). When an error is encountered, it will be passed to your function.

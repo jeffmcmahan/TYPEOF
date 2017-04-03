@@ -33,7 +33,7 @@ function printType(value, isRQ) {
  * @return {String}
  */
 function printObject(value) {
-  var keys = Object.keys(value).filter(function (key) { return value[key] !== value; })
+  var keys = Object.keys(value).sort().filter(function (key) { return value[key] !== value; })
   var obj= {}
   keys.forEach(function (key) { return obj[key] = printType(value[key]); })
   if (!keys.length) { return '{}' }
@@ -59,7 +59,7 @@ function printArray(arr) {
  * @return {String}
  */
 function printDuckType(duckType) {
-  var keys = Object.keys(duckType)
+  var keys = Object.keys(duckType).sort()
   var obj = {}
   keys.forEach(function (key) { return obj[key] = exports.rq(duckType[key]); })
   if (!keys.length) { return '{}' }
@@ -104,12 +104,9 @@ exports.rq = function (rq) {
  */
 exports.arg = function (arg) {
   if (arg === '__VOID') { return 'void' }
-  if (typeof arg === 'undefined') { return 'undefined' }
-  if (arg === null) { return 'null' }
-  if (typeof arg === 'object') {
+  if (arg && typeof arg === 'object') {
     if (arg instanceof Array) { return printArray(arg) }
     return printObject(arg)
   }
-  if (typeof arg === 'string') { return ("'" + arg + "'") }
-  return arg.toString()
+  return printType(arg)
 }
