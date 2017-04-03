@@ -153,8 +153,8 @@ TypeErrors produce description diffs of the form:
 ```
 TypeError:
 
-    (1) required: { age:number, name:string, ... }
-        provided: { age:string, name:number, ... }
+    (1) required: { name:string, weight:number, ... }
+        provided: { name:number, weight:string, ... }
 
     ...
 ```
@@ -171,7 +171,7 @@ TypeErrors produce description diffs of the form:
 ```
 TypeError:
 
-    (1) required: number|string
+    (1) required: string|number
         provided: null
 
     ...
