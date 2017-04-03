@@ -3,6 +3,8 @@
 const typesMatch = require('./types-match')
 const printValue = require('./print-value')
 
+//=========================================== Error Stack Transforms ===========
+
 /**
  * Alters a value to make it more suitable for printing to the console.
  * @param {*} rq
@@ -34,66 +36,92 @@ function cleanStack(stack) {
   }).join('\n')
 }
 
+function message(rq, arg, argNum) {
+  return ('\n' +
+    `    Value (${argNum}):\n` +
+    `     Required: ${printValue.rq(rq)}\n` +
+    `     Provided: ${printValue.arg(arg)}\n`
+  )
+}
+
+//============================================================ API =============
+
+/**
+ * Accept any argument(s) and return a function which accepts the requirement(s)
+ * that will be used to check the argument(s).
+ * @param {...*}
+ * @return {Function} check function
+ */
 function TYPEOF(...args) {
   return function(...rqs) {
-    if (off) return args[0]
-    let errMsg = ''
+    if (state.off) return args[0]
+    let msg = ''
     let pass = true
 
     // Must require something.
     if (!rqs.length) pass = false
-    if (rqs[0] === 'void' && !args.length) return
 
-    // Defined types.
-    rqs = rqs.map(rq => typeof rq === 'string' && dfns[rq] ? dfns[rq] : rq)
+    // If void and no arguments provided, pass.
+    if (rqs[0] === 'void' && !args.length) return
 
     // Check arity.
     if (rqs.length !== args.length) pass = false
 
+    // Defined types.
+    rqs = rqs.map(rq => (
+      typeof rq === 'string' && rq in state.definedTypes
+        ? state.definedTypes[rq]
+        : rq
+    ))
+
     // Check values.
     const len = rqs.length >= args.length ? rqs.length : args.length
     for (let i = 0; i < len; i++) {
-      if (!typesMatch(rqs[i], args[i])) {
+      const rq = rqs.length < (i + 1) ? '__VOID' : rqs[i]
+      const arg = args.length < (i + 1) ? '__VOID' : args[i]
+      if (!typesMatch(rq, arg)) {
         pass = false
-        const rqIsVoid = rqs.length < i + 1
-        const argIsVoid = args.length < i + 1
-        errMsg += '\n    Value (' + (i + 1) + '):\n'
-        errMsg += '     Required: ' + (rqIsVoid ? 'void (implicit)' : printValue.rq(rqs[i])) + '\n'
-        errMsg += '     Provided: ' + (argIsVoid ? 'void': printValue.arg(args[i])) + '\n'
+        msg += message(rq, arg, i + 1)
       }
     }
 
-    // Report failure.
+    // Throw and/or report a TypeError.
     if (!pass) {
-      const err = new TypeError('TYPEOF\n ' + errMsg.replace(/"/g, ''))
+      const err = new TypeError('TYPEOF\n ' + msg.replace(/"/g, ''))
       err.stack = cleanStack(err.stack)
-      if (onFail) onFail(err)
-      if (warn) console.log(err)
+      if (state.onFail) state.onFail(err)
+      if (state.warn) console.log(err)
       else throw err
     }
     return args[0]
   }
 }
 
-// API functions
-let onFail = null
-TYPEOF.ONFAIL = callback => onFail = callback
+//====================================================== API Methods ===========
 
-let warn = false
-TYPEOF.WARN = _=> warn = true
-
-let off = false
-TYPEOF.OFF = _=> off = true
-
-const dfns = {}
-
-TYPEOF.DFN = (name, desc, invoke = false) => {
-  if (invoke) desc.INVOKE = true
-  dfns[`${name}`] = desc
+const state = {
+  onFail: null,
+  warn: false,
+  off: false,
+  definedTypes: {}
 }
 
-// Define 'any' and '*'
-TYPEOF.DFN('any', _=> true, true)
-TYPEOF.DFN('*', _=> true, true)
+TYPEOF.ONFAIL = callback => state.onFail = callback
+TYPEOF.WARN = ()=> state.warn = true
+TYPEOF.OFF = ()=> state.off = true
+TYPEOF.DFN = (name, desc, invoke = false) => {
+  if (invoke) {
+    desc.__INVOKE = true
+    desc.__NAME = name
+  }
+  state.definedTypes[name] = desc
+}
+
+//================================================ Define 'any' and '*' ========
+
+TYPEOF.DFN('any', function() {return arguments.length > 0}, true)
+TYPEOF.DFN('*', function() {return arguments.length > 0}, true)
+
+//==============================================================================
 
 module.exports = TYPEOF
