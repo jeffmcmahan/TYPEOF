@@ -143,11 +143,9 @@ TYPEOF(val)('MyClass') // <-- By name works too.
 Specify any subset of keys and corresponding types to duck type a value.
 
 ```js
-
-  TYPEOF
-    (val)
-    ({ name:String, weight:Number })
-
+TYPEOF
+  (val)
+  ({ name:String, weight:Number })
 ```
 
 TypeErrors produce description diffs of the form:
