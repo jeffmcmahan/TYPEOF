@@ -82,9 +82,6 @@ TypeError:
     ...
 ```
 
-### Is the aim statically typed JS? No.
-`TYPEOF` doesn't ensure program correctness. That's not how javascript works, and not how I wish it to work. `TYPEOF` allows you to selectively limit runtime mischief with nice console feedback when something goes awry.
-
 ## API
 ### Validate types.
 `TYPEOF` implements pairwise type validation with Curry syntax:
