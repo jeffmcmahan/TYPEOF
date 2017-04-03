@@ -44,57 +44,63 @@ function message(rq, arg, argNum) {
   )
 }
 
+//======================================================== Checker =============
+
+/**
+ * Compares the types of the given arguments to the given requirements and
+ * throws/reports an informative if there is a mismatch.
+ * @param {Array} args
+ * @param {Array} rqs
+ * @return {*} - The first value being checked
+ */
+function check(args, rqs) {
+  let msg = ''
+  let pass = true
+
+  // Must require something.
+  if (!rqs.length) pass = false
+
+  // If void and no arguments provided, pass.
+  if (rqs[0] === 'void' && !args.length) return
+
+  // Defined types.
+  rqs = rqs.map(rq => (typeof rq === 'string' && rq in state.definedTypes)
+    ? state.definedTypes[rq]
+    : rq
+  )
+
+  // Check values.
+  const len = rqs.length >= args.length ? rqs.length : args.length
+  for (let i = 0; i < len; i++) {
+    const rq = rqs.length < (i + 1) ? '__VOID' : rqs[i]
+    const arg = args.length < (i + 1) ? '__VOID' : args[i]
+    if (!typesMatch(rq, arg)) {
+      pass = false
+      msg += message(rq, arg, i + 1)
+    }
+  }
+  if (pass) return args[0]
+
+  // Throw and/or report a TypeError.
+  const err = new TypeError('TYPEOF\n ' + msg.replace(/"/g, ''))
+  err.stack = cleanStack(err.stack)
+  if (state.onFail) state.onFail(err)
+  if (state.warn) console.log(err)
+  else throw err
+}
+
 //============================================================ API =============
 
 /**
  * Accept any argument(s) and return a function which accepts the requirement(s)
  * that will be used to check the argument(s).
- * @param {...*}
- * @return {Function} check function
+ * @param {...*} args
+ * @return {Function} -  A dummy function or the check function
  */
 function TYPEOF(...args) {
-  return function(...rqs) {
-    if (state.off) return args[0]
-    let msg = ''
-    let pass = true
-
-    // Must require something.
-    if (!rqs.length) pass = false
-
-    // If void and no arguments provided, pass.
-    if (rqs[0] === 'void' && !args.length) return
-
-    // Check arity.
-    if (rqs.length !== args.length) pass = false
-
-    // Defined types.
-    rqs = rqs.map(rq => (
-      typeof rq === 'string' && rq in state.definedTypes
-        ? state.definedTypes[rq]
-        : rq
-    ))
-
-    // Check values.
-    const len = rqs.length >= args.length ? rqs.length : args.length
-    for (let i = 0; i < len; i++) {
-      const rq = rqs.length < (i + 1) ? '__VOID' : rqs[i]
-      const arg = args.length < (i + 1) ? '__VOID' : args[i]
-      if (!typesMatch(rq, arg)) {
-        pass = false
-        msg += message(rq, arg, i + 1)
-      }
-    }
-
-    // Throw and/or report a TypeError.
-    if (!pass) {
-      const err = new TypeError('TYPEOF\n ' + msg.replace(/"/g, ''))
-      err.stack = cleanStack(err.stack)
-      if (state.onFail) state.onFail(err)
-      if (state.warn) console.log(err)
-      else throw err
-    }
-    return args[0]
-  }
+  return state.off
+    ? ()=> args[0]
+    : (...rqs) => check(args, rqs)
 }
 
 //====================================================== API Methods ===========
