@@ -38,9 +38,8 @@ function cleanStack(stack) {
 
 function message(rq, arg, argNum) {
   return ('\n' +
-    `    Value (${argNum}):\n` +
-    `     Required: ${printValue.rq(rq)}\n` +
-    `     Provided: ${printValue.arg(arg)}\n`
+    `    (${argNum}) required: ${printValue.rq(rq)}\n` +
+    `        provided: ${printValue.arg(arg)}\n`
   )
 }
 

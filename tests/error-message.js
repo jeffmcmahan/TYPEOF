@@ -17,9 +17,8 @@ void function () {
     test.bind(null, 'str'),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: boolean
-     Provided: 'str'`)
+   `(1) required: boolean
+        provided: 'str'`)
     },
     'Should report boolean type mismatch.'
   )
@@ -39,9 +38,8 @@ void function () {
     test.bind(null, 'str'),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: number
-     Provided: 'str'`)
+   `(1) required: number
+        provided: 'str'`)
     },
     'Should report number type mismatch.'
   )
@@ -61,9 +59,8 @@ void function () {
     test.bind(null, 1),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: string
-     Provided: 1`)
+   `(1) required: string
+        provided: 1`)
     },
     'Should report string type mismatch.'
   )
@@ -80,12 +77,11 @@ void function () {
   }
 
   assert.throws(
-    test.bind(null, {}),
+    test.bind(null, { prop:1 }),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: array
-     Provided: {}`)
+   `(1) required: array
+        provided: { prop:number }`)
     },
     'Should report array type mismatch.'
   )
@@ -105,9 +101,8 @@ void function () {
     test.bind(null, []),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: Object
-     Provided: []`)
+   `(1) required: Object
+        provided: []`)
     },
     'Should report object type mismatch.'
   )
@@ -127,25 +122,20 @@ void function () {
     test.bind(null, false, '55', 'true', {}, []),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: string
-     Provided: false
+   `(1) required: string
+        provided: false
 
-    Value (2):
-     Required: number
-     Provided: '55'
+    (2) required: number
+        provided: '55'
 
-    Value (3):
-     Required: boolean
-     Provided: 'true'
+    (3) required: boolean
+        provided: 'true'
 
-    Value (4):
-     Required: array
-     Provided: {}
+    (4) required: array
+        provided: {}
 
-    Value (5):
-     Required: Object
-     Provided: []`)
+    (5) required: Object
+        provided: []`)
     },
     'Should throw 5 value diffs for 5 failures.'
   )
@@ -165,9 +155,8 @@ void function () {
     test.bind(null, {name:'Joe', age:'55'}),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: { name:string, age:number }
-     Provided: { name:string, age:string }`)
+   `(1) required: { name:string, age:number }
+        provided: { name:string, age:string }`)
     },
     'Should be readable diff of duck-type and Object.'
   )
@@ -187,9 +176,8 @@ void function () {
     test.bind(null, false),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: string|number
-     Provided: false`)
+   `(1) required: string|number
+        provided: false`)
     },
     'Should be readable diff of disjoint type and boolean.'
   )
@@ -221,9 +209,8 @@ void function () {
     test.bind(null, false),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: MyClass|MyOtherClass
-     Provided: false`)
+   `(1) required: MyClass|MyOtherClass
+        provided: false`)
     },
     'Should be readable disjoint type diff.'
   )
@@ -243,9 +230,8 @@ void function () {
     test.bind(null, null),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: undefined
-     Provided: null`)
+   `(1) required: undefined
+        provided: null`)
     },
     'Should report undefined mistmatch.'
   )
@@ -265,9 +251,8 @@ void function () {
     test.bind(null, undefined),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: null
-     Provided: undefined`)
+   `(1) required: null
+        provided: undefined`)
     },
     'Should report null mismatch.'
   )
@@ -287,9 +272,8 @@ void function () {
     test.bind(null, 1),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: void
-     Provided: 1`)
+   `(1) required: void
+        provided: 1`)
     },
     'Should report explicit void requirement.'
   )
@@ -309,9 +293,8 @@ void function () {
     test.bind(null, 'yo'),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: void
-     Provided: 'yo'`)
+   `(1) required: void
+        provided: 'yo'`)
     },
     'Should report void mistmatch.'
   )
@@ -329,9 +312,8 @@ void function () {
     test.bind(null),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: string
-     Provided: void`)
+   `(1) required: string
+        provided: void`)
     },
     'Should report void mistmatch.'
   )
@@ -349,13 +331,11 @@ void function () {
     test.bind(null),
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: string
-     Provided: void
+   `(1) required: string
+        provided: void
 
-    Value (2):
-     Required: number
-     Provided: void`)
+    (2) required: number
+        provided: void`)
     },
     'Should report multiple void arguments mistmatch.'
   )
@@ -375,9 +355,8 @@ void function () {
     test,
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: MyClass
-     Provided: void`)
+   `(1) required: MyClass
+        provided: void`)
     },
     'Should report void/MyClass mismatch.'
   )
@@ -399,15 +378,14 @@ void function () {
     ()=> test(1, 2),
     function (err) {
       return err.toString().includes(
-   `Value (2):
-     Required: void (implicit)
-     Provided: 2`)
+   `(2) required: void (implicit)
+        provided: 2`)
     },
     'Should report implicit void mismatch.'
   )
 }()
 
-//=================================================== Any Requirement ==========
+//=================================================== 'any' Requirement ========
 
 void function () {
 
@@ -421,9 +399,8 @@ void function () {
     test,
     function (err) {
       return err.toString().includes(
-   `Value (1):
-     Required: any
-     Provided: void`)
+   `(1) required: any
+        provided: void`)
     },
     'Should report when any required but nothing passed.'
   )

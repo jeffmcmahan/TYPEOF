@@ -3,9 +3,18 @@
 npm install type.of
 ```
 
-## Why do this?
+```js
+function (name, weight, children) {
 
-Javascript is hostile to effective type checking.
+  TYPEOF
+    (...arguments)
+    (String, Number, Array)
+
+  // ...
+}
+```
+
+## Javascript is hostile to effective type checking.
 
 ```js
 typeof null               // object   >:(
@@ -41,9 +50,11 @@ We fix the gotchas, and when mismatches happen, there's no detective work:
 ```
 TypeError:
 
-   Value (2):
-    Required: number
-    Provided: '164lbs.'
+    (2) Required: number
+        Provided: '164lbs.'
+
+    (3) Required: array
+        Provided: { name:'John', weight:35, children:[] }
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
