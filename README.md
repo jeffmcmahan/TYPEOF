@@ -5,7 +5,7 @@ npm install type.of
 
 Expressive syntax:
 ```js
-function (name, weight, children) {
+function person(name, weight, children) {
 
   TYPEOF
     (...arguments)
@@ -55,7 +55,7 @@ true instanceof Boolean   // false    :/
 Gotchas make manual type validation logic categorically unmaintainable. And even if it were maintainable, thorough checks are [grotesque](https://www.joyent.com/node-js/production/design/errors#an-example). `TYPEOF` reduces all this to rote declaration:
 
 ```js
-function (name, weight, children) {
+function person(name, weight, children) {
 
   TYPEOF
     (...arguments)
@@ -72,9 +72,6 @@ TypeError:
 
     (2) required: number
         provided: '164lbs.'
-
-    (3) required: array
-        provided: { name:string, weight:number, children:array }
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
