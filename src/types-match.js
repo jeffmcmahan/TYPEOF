@@ -2,12 +2,13 @@
 
 /**
  * See whether required and provided types are the same.
- * @param {Function|String|Object|Array|undefined|null} type
+ * @param {*} type
  * @param {*} value
  * @return {Boolean}
  */
 module.exports = function typesMatch(type, value) {
-  if (typeof type === 'function' && type.INVOKE) return type(value)
+  if (type === '__VOID' || value === '__VOID') return false
+  if (typeof type === 'function' && type.__INVOKE) return type(value)
   if (type === null) return value === null
   if (typeof type === 'undefined') return typeof value === 'undefined'
   if (typeof type === 'string') {
