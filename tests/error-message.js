@@ -3,7 +3,7 @@
 const assert = require('assert')
 const TYPEOF = require('../src')
 
-//==============================================================================
+//================================================ Boolean Requirement =========
 
 void function () {
 
@@ -25,7 +25,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================= Number Requirement =========
 
 void function () {
 
@@ -47,7 +47,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================= String Requirement =========
 
 void function () {
 
@@ -69,7 +69,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================ Array Requirement ===========
 
 void function () {
 
@@ -91,7 +91,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================ Object Requirement ==========
 
 void function () {
 
@@ -113,7 +113,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================ Complex Type Diff ===========
 
 void function () {
 
@@ -151,7 +151,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================= Object Serialization =======
 
 void function () {
 
@@ -166,14 +166,14 @@ void function () {
     function (err) {
       return err.toString().includes(
    `Value (1):
-     Required: { name:string, age:number ... }
-     Provided: { name:string, age:string ... }`)
+     Required: { name:string, age:number }
+     Provided: { name:string, age:string }`)
     },
-    'Should be readable duck-type diff.'
+    'Should be readable diff of duck-type and Object.'
   )
 }()
 
-//==============================================================================
+//=================================================== Array Serialization ======
 
 void function () {
 
@@ -191,7 +191,7 @@ void function () {
      Required: string|number
      Provided: false`)
     },
-    'Should be readable disjoint type diff.'
+    'Should be readable diff of disjoint type and boolean.'
   )
 
   function test2(arg) {
@@ -205,11 +205,9 @@ void function () {
     function (err) {
       return err.toString().includes('[ number, number, number ]')
     },
-    'Should serialize the array.'
+    'Should produce a readably serialized array type description.'
   )
 }()
-
-//==============================================================================
 
 void function () {
 
@@ -231,7 +229,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//=============================================== Undefined Requirement ========
 
 void function () {
 
@@ -253,7 +251,51 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================== Null Requirement ==========
+
+void function () {
+
+  function test(nul) {
+    TYPEOF
+      (...arguments)
+      (null)
+  }
+
+  assert.throws(
+    test.bind(null, undefined),
+    function (err) {
+      return err.toString().includes(
+   `Value (1):
+     Required: null
+     Provided: undefined`)
+    },
+    'Should report null mismatch.'
+  )
+}()
+
+//================================================== Void Requirement ==========
+
+void function () {
+
+  function test() {
+    TYPEOF
+      (...arguments)
+      ('void')
+  }
+
+  assert.throws(
+    test.bind(null, 1),
+    function (err) {
+      return err.toString().includes(
+   `Value (1):
+     Required: void
+     Provided: 1`)
+    },
+    'Should report explicit void requirement.'
+  )
+}()
+
+//====================================================== Void Value ============
 
 void function () {
 
@@ -275,8 +317,6 @@ void function () {
   )
 }()
 
-//==============================================================================
-
 void function () {
 
   function test(str) {
@@ -296,8 +336,6 @@ void function () {
     'Should report void mistmatch.'
   )
 }()
-
-//==============================================================================
 
 void function () {
 
@@ -323,30 +361,6 @@ void function () {
   )
 }()
 
-//==============================================================================
-
-void function () {
-
-  function test(nul) {
-    TYPEOF
-      (...arguments)
-      (null)
-  }
-
-  assert.throws(
-    test.bind(null, undefined),
-    function (err) {
-      return err.toString().includes(
-   `Value (1):
-     Required: null
-     Provided: undefined`)
-    },
-    'Should report null mismatch.'
-  )
-}()
-
-//==============================================================================
-
 void function () {
 
   class MyClass {}
@@ -369,7 +383,7 @@ void function () {
   )
 }()
 
-//==============================================================================
+//================================================== Implicit Void =============
 
 void function () {
 
@@ -382,7 +396,7 @@ void function () {
   }
 
   assert.throws(
-    _=> test(1, 2),
+    ()=> test(1, 2),
     function (err) {
       return err.toString().includes(
    `Value (2):
@@ -391,7 +405,28 @@ void function () {
     },
     'Should report implicit void mismatch.'
   )
+}()
 
+//=================================================== Any Requirement ==========
+
+void function () {
+
+  function test() {
+    TYPEOF
+      (...arguments)
+      ('any')
+  }
+
+  assert.throws(
+    test,
+    function (err) {
+      return err.toString().includes(
+   `Value (1):
+     Required: any
+     Provided: void`)
+    },
+    'Should report when any required but nothing passed.'
+  )
 }()
 
 //==============================================================================

@@ -46,10 +46,10 @@ assert(
 
 assert(
   function test() {
-    const args = TYPEOF
+    const arg = TYPEOF
       (...arguments)
       (Number)
-    return args === 1
+    return arg === 1
   }(1),
   'Should return the first value being checked.'
 )
@@ -68,12 +68,12 @@ void function () {
   }
 
   assert.doesNotThrow(
-    _=> test({url:''}, {headersSent:false}, _=>{}),
+    ()=> test({url:''}, {headersSent:false}, ()=>{}),
     'Should not throw when types match the middleware dfn.'
   )
 
   assert.throws(
-    _=> test(),
+    ()=> test(),
     'Should throw when types do not match the middleware dfn.'
   )
 
@@ -92,12 +92,12 @@ void function () {
   }
 
   assert.doesNotThrow(
-    _=> test(false),
+    ()=> test(false),
     'Should not throw when types match the invocable type dfn.'
   )
 
   assert.throws(
-    _=> test(0),
+    ()=> test(0),
     'Should throw when value doesn\'t satisfy the invocable type dfn.'
   )
 
@@ -108,7 +108,7 @@ void function () {
 void function () {
 
   let failCallbackFired = false
-  TYPEOF.ONFAIL(_=> failCallbackFired = true)
+  TYPEOF.ONFAIL(()=> failCallbackFired = true)
 
   function test() {
     TYPEOF
@@ -135,7 +135,7 @@ void function () {
   TYPEOF.OFF()
   assert.doesNotThrow(
     test,
-    'Should not throw when in silent mode, even when there is type error.'
+    'Should not throw when off, even when there is type error.'
   )
 
 }()
