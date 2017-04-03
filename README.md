@@ -14,6 +14,24 @@ function (name, weight, children) {
 }
 ```
 
+```
+TypeError:
+
+    (2) Required: number
+        Provided: '164lbs.'
+
+    (3) Required: array
+        Provided: { name:string, weight:number, children:array }
+
+    at yourFunction (/Users/.../yourFile.js:10:7)
+    at /Users/.../yourFile.js:13:3
+    at Object.<anonymous> (/Users/.../yourFile.js:15:2)
+    at Module._compile (module.js:541:32)
+    at Object.Module._extensions..js (module.js:550:10)
+    at Module.load (module.js:458:32)
+    ...
+```
+
 ## Javascript is hostile to effective type checking.
 
 ```js
@@ -54,7 +72,7 @@ TypeError:
         Provided: '164lbs.'
 
     (3) Required: array
-        Provided: { name:'John', weight:35, children:[] }
+        Provided: { name:string, weight:number, children:array }
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
