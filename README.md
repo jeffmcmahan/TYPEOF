@@ -3,6 +3,7 @@
 npm install type.of
 ```
 
+Expressive syntax:
 ```js
 function (name, weight, children) {
 
@@ -14,6 +15,7 @@ function (name, weight, children) {
 }
 ```
 
+Nice messages:
 ```
 TypeError:
 
