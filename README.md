@@ -19,10 +19,10 @@ Nice messages:
 ```
 TypeError:
 
-    (2) Required: number
+    (2) required: number
         Provided: '164lbs.'
 
-    (3) Required: array
+    (3) required: array
         Provided: { name:string, weight:number, children:array }
 
     at yourFunction (/Users/.../yourFile.js:10:7)
@@ -70,11 +70,11 @@ We fix the gotchas, and when mismatches happen, there's no detective work:
 ```
 TypeError:
 
-    (2) Required: number
-        Provided: '164lbs.'
+    (2) required: number
+        provided: '164lbs.'
 
-    (3) Required: array
-        Provided: { name:string, weight:number, children:array }
+    (3) required: array
+        provided: { name:string, weight:number, children:array }
 
     at yourFunction (/Users/.../yourFile.js:10:7)
     at /Users/.../yourFile.js:13:3
